@@ -1,0 +1,44 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- azure-pipelines
+
+jobs:
+- job: Build
+  timeoutInMinutes: 0
+
+  variables:
+    - group: che-theia
+    - name: tag
+      value: next
+
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+  - task: Docker@1
+    displayName: Container registry login
+    inputs:
+      command: login
+      dockerRegistryEndpoint: camino.azurecr.io
+      containerRegistryType: Container Registry
+
+  - script: |
+      cd dockerfiles/theia-dev
+      ./build.sh --build-args:$(github_token) --organization:camino.azurecr.io --tag:$(tag)
+    displayName: Building theia-dev
+ 
+  - script: |
+      export
+      cd dockerfiles/theia
+      ./build.sh --build-args:$(github_token),THEIA_VERSION=master --tag:$(tag) --branch:master --git-ref:refs\\/heads\\/master --organization:camino.azurecr.io
+    displayName: Building Theia
+
+  - script: |
+      docker push camino.azurecr.io/che-theia-dev:$(tag)
+      docker push camino.azurecr.io/che-theia:$(tag)
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    displayName: Pushing
