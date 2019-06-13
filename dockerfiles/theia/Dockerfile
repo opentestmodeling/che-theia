@@ -62,6 +62,8 @@ ARG CDN_PREFIX=""
 ARG MONACO_CDN_PREFIX=""
 WORKDIR ${HOME}/theia-source-code
 
+RUN yarn add -W @opentestmodeling/vstep-ngt-core-dsl @opentestmodeling/vstep-ngt-core-sprotty
+
 COPY che-theia/che-theia-init-sources.yml ${HOME}/che-theia-init-sources.yml
 
 #invalidate cache for che-theia extensions
