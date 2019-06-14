@@ -15,14 +15,16 @@ import { ProjectPathVariableResolver } from './variable/project-path-variable-re
 import { CheTaskRunner } from './task/che-task-runner';
 import { ServerVariableResolver } from './variable/server-variable-resolver';
 import { MachineExecClient } from './machine/machine-exec-client';
-import { CheTerminalWidget, CheTerminalWidgetOptions, TerminalWidgetFactory } from './machine/terminal-widget';
+import { MachineExecWatcher } from './machine/machine-exec-watcher';
 import { CheTaskEventsHandler } from './preview/task-events-handler';
 import { TasksPreviewManager } from './preview/tasks-preview-manager';
-import { AttachTerminalClient } from './machine/attach-client';
 import { PreviewUrlsWidgetFactory, PreviewUrlsWidget, PreviewUrlsWidgetOptions } from './preview/previews-widget';
 import { CheTaskPreviewMode } from './preview/task-preview-mode';
 import { PreviewUrlOpenService } from './preview/preview-url-open-service';
 import { CheWorkspaceClient } from './che-workspace-client';
+import { LaunchConfigurationsExporter } from './export/launch-configs-exporter';
+import { TaskConfigurationsExporter } from './export/task-configs-exporter';
+import { ConfigurationsExporter, ExportConfigurationsManager } from './export/export-configs-manager';
 
 const container = new Container();
 container.bind(CheTaskProvider).toSelf().inSingletonScope();
@@ -30,23 +32,16 @@ container.bind(CheTaskEventsHandler).toSelf().inSingletonScope();
 container.bind(TasksPreviewManager).toSelf().inSingletonScope();
 container.bind(CheTaskRunner).toSelf().inSingletonScope();
 container.bind(MachinesPicker).toSelf().inSingletonScope();
-container.bind(AttachTerminalClient).toSelf().inSingletonScope();
 container.bind(MachineExecClient).toSelf().inSingletonScope();
+container.bind(MachineExecWatcher).toSelf().inSingletonScope();
 container.bind(ServerVariableResolver).toSelf().inSingletonScope();
 container.bind(ProjectPathVariableResolver).toSelf().inSingletonScope();
 container.bind(CheWorkspaceClient).toSelf().inSingletonScope();
 container.bind(CheTaskPreviewMode).toSelf().inSingletonScope();
 container.bind(PreviewUrlOpenService).toSelf().inSingletonScope();
-
-container.bind(CheTerminalWidget).toSelf().inTransientScope();
-container.bind(TerminalWidgetFactory).toDynamicValue(ctx => ({
-    createWidget: (options: CheTerminalWidgetOptions) => {
-        const child = new Container({ defaultScope: 'Singleton' });
-        child.parent = ctx.container;
-        child.bind(CheTerminalWidgetOptions).toConstantValue(options);
-        return child.get(CheTerminalWidget);
-    }
-}));
+container.bind<ConfigurationsExporter>(ConfigurationsExporter).to(TaskConfigurationsExporter).inSingletonScope();
+container.bind<ConfigurationsExporter>(ConfigurationsExporter).to(LaunchConfigurationsExporter).inSingletonScope();
+container.bind(ExportConfigurationsManager).toSelf().inSingletonScope();
 
 container.bind(PreviewUrlsWidget).toSelf().inTransientScope();
 container.bind(PreviewUrlsWidgetFactory).toDynamicValue(ctx => ({

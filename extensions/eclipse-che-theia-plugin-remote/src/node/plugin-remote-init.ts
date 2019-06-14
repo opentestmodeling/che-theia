@@ -40,7 +40,7 @@ export class PluginRemoteInit {
     /**
      * Max number of trying new port
      */
-    private static readonly MAX_RETRIES = 1;
+    private static readonly MAX_RETRIES = 100;
 
     /**
      *  number of retries for finding port
@@ -301,7 +301,6 @@ class PluginDeployerHandlerImpl implements PluginDeployerHandler {
     constructor(
         @inject(HostedPluginReader) private readonly reader: HostedPluginReader,
     ) {
-        this.reader.initialize();
     }
 
     async deployFrontendPlugins(frontendPlugins: PluginDeployerEntry[]): Promise<void> {

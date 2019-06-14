@@ -75,8 +75,9 @@ export interface CheVariablesMain {
 
 export interface CheTask {
     registerTaskRunner(type: string, runner: che.TaskRunner): Promise<che.Disposable>;
-    fireTaskExited(taskId: number): Promise<void>;
+    fireTaskExited(event: che.TaskExitedEvent): Promise<void>;
     $runTask(id: number, config: che.TaskConfiguration, ctx?: string): Promise<void>;
+    $onTaskExited(id: number): Promise<void>;
     $killTask(id: number): Promise<void>;
     $getTaskInfo(id: number): Promise<che.TaskInfo | undefined>;
 }
@@ -85,6 +86,7 @@ export const CheTaskMain = Symbol('CheTaskMain');
 export interface CheTaskMain {
     $registerTaskRunner(type: string): Promise<void>;
     $disposeTaskRunner(type: string): Promise<void>;
+    $fireTaskExited(event: che.TaskExitedEvent): Promise<void>;
 }
 
 export interface Variable {
@@ -343,6 +345,10 @@ export interface Preferences {
     [key: string]: string;
 }
 
+export interface WorkspaceSettings {
+    [key: string]: string;
+}
+
 export const PLUGIN_RPC_CONTEXT = {
     CHE_WORKSPACE: <ProxyIdentifier<CheWorkspace>>createProxyIdentifier<CheWorkspace>('CheWorkspace'),
     CHE_WORKSPACE_MAIN: <ProxyIdentifier<CheWorkspaceMain>>createProxyIdentifier<CheWorkspaceMain>('CheWorkspaceMain'),
@@ -376,6 +382,7 @@ export interface CheApiService {
     getWorkspaceById(workspaceId: string): Promise<cheApi.workspace.Workspace>;
 
     updateWorkspace(workspaceId: string, workspace: cheApi.workspace.Workspace): Promise<cheApi.workspace.Workspace>;
+    stop(): Promise<void>;
 
     getFactoryById(factoryId: string): Promise<cheApi.factory.Factory>;
 
@@ -385,6 +392,7 @@ export interface CheApiService {
     replaceUserPreferences(preferences: Preferences): Promise<Preferences>;
     deleteUserPreferences(): Promise<void>;
     deleteUserPreferences(list: string[] | undefined): Promise<void>;
+    getWorkspaceSettings(): Promise<WorkspaceSettings>;
 
     generateSshKey(service: string, name: string): Promise<cheApi.ssh.SshPair>;
     createSshKey(sshKeyPair: cheApi.ssh.SshPair): Promise<void>;
@@ -400,6 +408,7 @@ export interface CheTaskService extends JsonRpcServer<CheTaskClient> {
     registerTaskRunner(type: string): Promise<void>;
     disposeTaskRunner(type: string): Promise<void>;
     disconnectClient(client: CheTaskClient): void;
+    fireTaskExited(event: che.TaskExitedEvent): Promise<void>;
 }
 
 export const CheTaskClient = Symbol('CheTaskClient');
@@ -407,7 +416,73 @@ export interface CheTaskClient {
     runTask(id: number, taskConfig: che.TaskConfiguration, ctx?: string): Promise<void>;
     killTask(id: number): Promise<void>;
     getTaskInfo(id: number): Promise<che.TaskInfo | undefined>;
-    setTaskInfoHandler(func: (id: number) => Promise<che.TaskInfo | undefined>): void;
-    setRunTaskHandler(func: (id: number, config: che.TaskConfiguration, ctx?: string) => Promise<void>): void;
+    onTaskExited(id: number): Promise<void>;
+    addTaskInfoHandler(func: (id: number) => Promise<che.TaskInfo | undefined>): void;
+    addRunTaskHandler(func: (id: number, config: che.TaskConfiguration, ctx?: string) => Promise<void>): void;
+    addTaskExitedHandler(func: (id: number) => Promise<void>): void;
     onKillEvent: Event<number>
+}
+
+export interface ChePluginRegistry {
+    name: string,
+    uri: string
+}
+
+/**
+ * Describes properties in plugin meta.yaml
+ */
+export interface ChePluginMetadata {
+    publisher: string,
+    name: string,
+    version: string,
+    type: string,
+    displayName: string,
+    title: string,
+    description: string,
+    icon: string,
+    url: string,
+    repository: string,
+    firstPublicationDate: string,
+    category: string,
+    latestUpdateDate: string,
+
+    // Plugin KEY. Used to set in workpsace configuration
+    key: string
+}
+
+export const CHE_PLUGIN_SERVICE_PATH = '/che-plugin-service';
+
+export const ChePluginService = Symbol('ChePluginService');
+
+export interface ChePluginService {
+
+    /**
+     * Returns default plugin registry;
+     */
+    getDefaultRegistry(): Promise<ChePluginRegistry>;
+
+    /**
+     * Returns a list of available plugins on the plugin registry.
+     *
+     * @param registry ChePluginRegistry plugin registry
+     * @param filter filter
+     * @return list of available plugins
+     */
+    getPlugins(registry: ChePluginRegistry, filter: string): Promise<ChePluginMetadata[]>;
+
+    /**
+     * Returns list of plugins described in workspace configuration.
+     */
+    getWorkspacePlugins(): Promise<string[]>;
+
+    /**
+     * Adds a plugin to workspace configuration.
+     */
+    addPlugin(pluginKey: string): Promise<void>;
+
+    /**
+     * Removes a plugin from workspace configuration.
+     */
+    removePlugin(pluginKey: string): Promise<void>;
+
 }

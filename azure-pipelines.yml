@@ -13,7 +13,7 @@ jobs:
   variables:
     - group: che-theia
     - name: organization
-      value: camino.azurecr.io
+      value: camino
     - name: prefix
       value: optemi
     - name: tag
@@ -23,26 +23,28 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
+  - script: |
+      cd dockerfiles/theia-dev
+      ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --prefix:$(prefix)
+    displayName: Building theia-dev
+
+  - script: |
+      cd dockerfiles/theia
+      ./build.sh --build-args:GITHUB_TOKEN=$(github_token),THEIA_VERSION=master --tag:$(tag) --prefix:$(prefix) --branch:master --git-ref:refs\\/heads\\/master --organization:$(organization)
+    displayName: Building Theia
+
   - task: Docker@1
     displayName: Container registry login
     inputs:
       command: login
       dockerRegistryEndpoint: camino.azurecr.io
       containerRegistryType: Container Registry
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
   - script: |
-      cd dockerfiles/theia-dev
-      ./build.sh --build-args:$(github_token) --organization:$(organization) --tag:$(tag) --prefix:$(prefix)
-    displayName: Building theia-dev
- 
-  - script: |
-      export
-      cd dockerfiles/theia
-      ./build.sh --build-args:$(github_token),THEIA_VERSION=master --tag:$(tag) --prefix:$(prefix) --branch:master --git-ref:refs\\/heads\\/master --organization:$(organization)
-    displayName: Building Theia
-
-  - script: |
-      docker push $(organization)/$(prefix)-theia-dev:$(tag)
-      docker push $(organization)/$(prefix)-theia:$(tag)
+      docker tag $(organization)/che-theia-dev:$(tag) camino.azurecr.io/$(organization)/che-theia-dev:$(tag)
+      docker tag $(organization)/che-theia:$(tag) camino.azurecr.io/$(organization)/che-theia:$(tag)
+      docker push camino.azurecr.io/$(organization)/che-theia-dev:$(tag)
+      docker push camino.azurecr.io/$(organization)/che-theia:$(tag)
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     displayName: Pushing

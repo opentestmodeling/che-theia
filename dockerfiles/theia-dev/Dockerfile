@@ -35,10 +35,11 @@ ENV HOME=/home/theia-dev \
     # Specify the directory of git (avoid to search at init of Theia)
     USE_LOCAL_GIT=true \
     LOCAL_GIT_DIRECTORY=/usr \
-    GIT_EXEC_PATH=/usr/libexec/git-core
+    GIT_EXEC_PATH=/usr/libexec/git-core \
+    THEIA_ELECTRON_SKIP_REPLACE_FFMPEG=true
 
 # Define package of the theia generator to use
-ARG THEIA_GENERATOR_PACKAGE=@eclipse-che/theia-generator@0.0.1-1556612396
+ARG THEIA_GENERATOR_PACKAGE=@eclipse-che/theia-generator@0.0.1-1559634039
 
 WORKDIR ${HOME}
 

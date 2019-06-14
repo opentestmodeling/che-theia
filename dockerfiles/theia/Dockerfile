@@ -19,7 +19,7 @@ WORKDIR ${HOME}
 ARG GITHUB_TOKEN
 
 # Define upstream version of theia to use
-ARG THEIA_VERSION=0.5.0
+ARG THEIA_VERSION=master
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
@@ -77,6 +77,9 @@ RUN yarn
 # Run into production mode
 RUN che:theia production
 
+# FIX ME, temporary fix to restore build
+RUN cd che/che-theia && git reset --hard
+
 # Compile plugins
 RUN cd plugins && ./foreach_yarn
 
@@ -94,7 +97,9 @@ ENV USE_LOCAL_GIT=true \
     THEIA_DEFAULT_PLUGINS=local-dir:///default-theia-plugins \
     # Specify the directory of git (avoid to search at init of Theia)
     LOCAL_GIT_DIRECTORY=/usr \
-    GIT_EXEC_PATH=/usr/libexec/git-core
+    GIT_EXEC_PATH=/usr/libexec/git-core \
+    # Ignore from port plugin the default hosted mode port
+    PORT_PLUGIN_EXCLUDE_3130=TRUE
 
 EXPOSE 3100 3130
 
@@ -105,7 +110,9 @@ COPY --from=builder /home/theia-dev/theia-source-code/production/plugins /defaul
 # Install bzip2 to unpack files
 # Install which tool in order to search git
 # Install curl and bash
-RUN apk add --update --no-cache sudo git bzip2 which bash curl
+# Install ssh for cloning ssh-repositories
+# Install less for handling git diff properly
+RUN apk add --update --no-cache sudo git bzip2 which bash curl openssh openssh-keygen less
 RUN adduser -D -S -u 1001 -G root -h ${HOME} -s /bin/sh theia \
     && echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
     # Create /projects for Che

@@ -19,11 +19,13 @@ import { Disposable } from 'vscode-jsonrpc';
 import { TerminalWidgetOptions } from '@theia/terminal/lib/browser/base/terminal-widget';
 import URI from '@theia/core/lib/common/uri';
 
+const ReconnectingWebSocket = require('reconnecting-websocket');
 export const REMOTE_TERMINAL_WIDGET_FACTORY_ID = 'remote-terminal';
 export const RemoteTerminalWidgetOptions = Symbol('RemoteTerminalWidgetOptions');
 export interface RemoteTerminalWidgetOptions extends Partial<TerminalWidgetOptions> {
     machineName: string,
     workspaceId: string,
+    closeWidgetOnExitOrError: boolean,
     endpoint: string
 }
 
@@ -49,19 +51,30 @@ export class RemoteTerminalWidget extends TerminalWidgetImpl {
     @inject(RemoteTerminalWidgetOptions)
     options: RemoteTerminalWidgetOptions;
 
+    protected terminalId = -1;
+    private isOpen: boolean = false;
+
     @postConstruct()
     protected init(): void {
         super.init();
 
         this.toDispose.push(this.remoteTerminalWatcher.onTerminalExecExit(exitEvent => {
             if (this.terminalId === exitEvent.id) {
-                this.dispose();
+                if (this.options.closeWidgetOnExitOrError) {
+                    this.dispose();
+                }
+                this.onTermDidClose.fire(this);
+                this.onTermDidClose.dispose();
             }
         }));
 
         this.toDispose.push(this.remoteTerminalWatcher.onTerminalExecError(errEvent => {
             if (this.terminalId === errEvent.id) {
-                this.dispose();
+                if (this.options.closeWidgetOnExitOrError) {
+                    this.dispose();
+                }
+                this.onTermDidClose.fire(this);
+                this.onTermDidClose.dispose();
                 this.logger.error(`Terminal error: ${errEvent.stack}`);
             }
         }));
@@ -74,10 +87,10 @@ export class RemoteTerminalWidget extends TerminalWidgetImpl {
                 this.termServer = termProxyCreator.create();
 
                 this.toDispose.push(this.termServer.onDidCloseConnection(() => {
-                    const disposable = this.termServer.onDidOpenConnection(() => {
+                    const disposable = this.termServer.onDidOpenConnection(async () => {
                         disposable.dispose();
                         this.waitForRemoteConnection = new Deferred<WebSocket>();
-                        this.reconnectTerminalProcess();
+                        await this.reconnectTerminalProcess();
                     });
                     this.toDispose.push(disposable);
                 }));
@@ -101,13 +114,12 @@ export class RemoteTerminalWidget extends TerminalWidgetImpl {
         throw new Error('Failed to start terminal' + (id ? ` for id: ${id}.` : '.'));
     }
 
-    protected connectTerminalProcess(): void {
+    protected async connectTerminalProcess(): Promise<void> {
         if (typeof this.terminalId !== 'number') {
             return;
         }
         this.toDisposeOnConnect.dispose();
-        this.term.reset();
-        this.connectSocket(this.terminalId);
+        await this.connectSocket(this.terminalId);
     }
 
     get processId(): Promise<number> {
@@ -120,36 +132,53 @@ export class RemoteTerminalWidget extends TerminalWidgetImpl {
         })();
     }
 
-    protected connectSocket(id: number) {
+    protected async connectSocket(id: number): Promise<void> {
+        if (this.isOpen) {
+            return Promise.resolve();
+        }
         const socket = this.createWebSocket(id.toString());
 
+        const sendListener = data => socket.send(data);
+
         socket.onopen = () => {
+            this.term.reset();
             if (this.waitForRemoteConnection) {
                 this.waitForRemoteConnection.resolve(socket);
             }
 
-            const sendListener = data => socket.send(data);
             this.term.on('data', sendListener);
             socket.onmessage = ev => this.write(ev.data);
 
-            this.toDisposeOnConnect.push(Disposable.create(() => {
-                this.term.off('data', sendListener);
-                socket.close();
-            }));
-
-            socket.onerror = err => {
-                console.error(err);
-            };
-
             this.toDispose.push(Disposable.create(() => {
                 socket.close();
+                this.term.off('data', sendListener);
             }));
+
+            this.isOpen = true;
+            return Promise.resolve();
+        };
+
+        socket.onerror = err => {
+            this.term.off('data', sendListener);
+            return Promise.resolve();
+        };
+
+        socket.onclose = code => {
+            this.term.off('data', sendListener);
+            return Promise.resolve();
         };
     }
 
     protected createWebSocket(pid: string): WebSocket {
         const url = new URI(this.options.endpoint).resolve(ATTACH_TERMINAL_SEGMENT).resolve(this.terminalId + '');
-        return new WebSocket(url.toString(true));
+        return new ReconnectingWebSocket(url.toString(true), undefined, {
+            maxReconnectionDelay: 10000,
+            minReconnectionDelay: 1000,
+            reconnectionDelayGrowFactor: 1.3,
+            connectionTimeout: 10000,
+            maxRetries: Infinity,
+            debug: false
+        });
     }
 
     protected async attachTerminal(id: number): Promise<number | undefined> {
@@ -174,6 +203,7 @@ export class RemoteTerminalWidget extends TerminalWidgetImpl {
                 workspaceId: this.options.workspaceId
             },
             cmd: cmd,
+            cwd: this.options.cwd,
             cols,
             rows,
             tty: true,
