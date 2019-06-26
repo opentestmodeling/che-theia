@@ -85,6 +85,10 @@ RUN cd che/che-theia && git reset --hard
 # Compile plugins
 RUN cd plugins && ./foreach_yarn
 
+RUN cd ${HOME}/theia-source-code/production && \
+    yarn add @opentestmodeling/vstep-ngt-core-dsl \
+             @opentestmodeling/vstep-ngt-core-sprotty
+
 # change permissions
 RUN find production -exec sh -c "chgrp 0 {}; chmod g+rwX {}" \; 2>log.txt
 
