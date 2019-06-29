@@ -18,6 +18,8 @@ WORKDIR ${HOME}
 # else check if github rate limit is enough, else will abort requiring to set GITHUB_TOKEN value
 ARG GITHUB_TOKEN
 
+ARG THEIA_GITHUB_REPO=theia-ide/theia
+
 # Define upstream version of theia to use
 ARG THEIA_VERSION=master
 
@@ -40,10 +42,10 @@ RUN if [ ! -z "${GITHUB_TOKEN-}" ]; then \
     fi
 
 #invalidate cache
-ADD https://${GITHUB_TOKEN}:x-oauth-basic@api.github.com/repos/theia-ide/theia/git/${GIT_REF} /tmp/branch_info.json
+ADD https://${GITHUB_TOKEN}:x-oauth-basic@api.github.com/repos/${THEIA_GITHUB_REPO}/git/${GIT_REF} /tmp/branch_info.json
 
 # Clone theia
-RUN git clone --branch ${GIT_BRANCH_NAME}  --single-branch --depth 1 https://github.com/theia-ide/theia ${HOME}/theia-source-code
+RUN git clone --branch ${GIT_BRANCH_NAME}  --single-branch --depth 1 https://github.com/${THEIA_GITHUB_REPO} ${HOME}/theia-source-code
 
 # Add patches
 ADD src/patches ${HOME}/patches
@@ -62,8 +64,6 @@ ARG CDN_PREFIX=""
 ARG MONACO_CDN_PREFIX=""
 WORKDIR ${HOME}/theia-source-code
 
-RUN yarn add -W @opentestmodeling/vstep-ngt-core-dsl @opentestmodeling/vstep-ngt-core-sprotty
-
 COPY che-theia/che-theia-init-sources.yml ${HOME}/che-theia-init-sources.yml
 
 #invalidate cache for che-theia extensions
@@ -75,6 +75,11 @@ RUN che:theia cdn --theia="${CDN_PREFIX}" --monaco="${MONACO_CDN_PREFIX}"
 
 # Compile Theia
 RUN yarn
+
+# Add more extensions
+RUN cd examples/assembly && \
+    yarn add @opentestmodeling/vstep-ngt-core-dsl@0.8.0-next.2 \
+             @opentestmodeling/vstep-ngt-core-sprotty@0.8.0-next.2
 
 # Run into production mode
 RUN che:theia production
@@ -93,7 +98,7 @@ RUN find production -exec sh -c "chgrp 0 {}; chmod g+rwX {}" \; 2>log.txt
 # Runtime Image
 #
 # Use node image
-FROM node:10.15-alpine as runtime
+FROM node:10.16-alpine as runtime
 ENV USE_LOCAL_GIT=true \
     HOME=/home/theia \
     THEIA_DEFAULT_PLUGINS=local-dir:///default-theia-plugins \
