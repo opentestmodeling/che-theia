@@ -78,8 +78,8 @@ RUN yarn
 
 # Add more extensions
 RUN cd examples/assembly && \
-    yarn add @opentestmodeling/vstep-ngt-core-dsl \
-             @opentestmodeling/vstep-ngt-core-sprotty
+    yarn add @opentestmodeling/vstep-ngt-core-dsl@0.8.0-next.2 \
+             @opentestmodeling/vstep-ngt-core-sprotty@0.8.0-next.2
 
 # Run into production mode
 RUN che:theia production
