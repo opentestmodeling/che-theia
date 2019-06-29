@@ -42,9 +42,9 @@ jobs:
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
   - script: |
-      docker tag $(organization)/che-theia-dev:$(tag) camino.azurecr.io/$(organization)/che-theia-dev:$(tag)
-      docker tag $(organization)/che-theia:$(tag) camino.azurecr.io/$(organization)/che-theia:$(tag)
-      docker push camino.azurecr.io/$(organization)/che-theia-dev:$(tag)
-      docker push camino.azurecr.io/$(organization)/che-theia:$(tag)
+      docker tag $(organization)/$(prefix)-theia-dev:$(tag) camino.azurecr.io/$(organization)/$(prefix)-theia-dev:$(tag)
+      docker tag $(organization)/$(prefix)-theia:$(tag) camino.azurecr.io/$(organization)/$(prefix)-theia:$(tag)
+      docker push camino.azurecr.io/$(organization)/$(prefix)-theia-dev:$(tag)
+      docker push camino.azurecr.io/$(organization)/$(prefix)-theia:$(tag)
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     displayName: Pushing
