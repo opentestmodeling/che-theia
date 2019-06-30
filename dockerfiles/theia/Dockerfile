@@ -119,7 +119,7 @@ COPY --from=builder /home/theia-dev/theia-source-code/production/plugins /defaul
 # Install curl and bash
 # Install ssh for cloning ssh-repositories
 # Install less for handling git diff properly
-RUN apk add --update --no-cache sudo git bzip2 which bash curl openssh openssh-keygen less
+RUN apk add --update --no-cache sudo git bzip2 which bash curl openssh openssh-keygen less openjdk8-jre
 RUN adduser -D -S -u 1001 -G root -h ${HOME} -s /bin/sh theia \
     && echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
     # Create /projects for Che
