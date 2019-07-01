@@ -29,8 +29,12 @@ export class PortScanner {
         const ipConverter = new IpConverter();
         // connect to /proc/net/tcp and /proc/net/tcp6
         const command = new Command(__dirname);
-        const outputv4 = await command.exec(PortScanner.GRAB_PORTS_IPV4);
-        const outputv6 = await command.exec(PortScanner.GRAB_PORTS_IPV6);
+        const outputv4 = await command
+            .exec(PortScanner.GRAB_PORTS_IPV4)
+            .catch(e => { console.error(e); return ''; });
+        const outputv6 = await command
+            .exec(PortScanner.GRAB_PORTS_IPV6);
+            .catch(e => { console.error(e); return ''; });
 
         // assembe ipv4 and ipv6 output
         const output = `
