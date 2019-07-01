@@ -33,7 +33,7 @@ export class PortScanner {
             .exec(PortScanner.GRAB_PORTS_IPV4)
             .catch(e => { console.error(e); return ''; });
         const outputv6 = await command
-            .exec(PortScanner.GRAB_PORTS_IPV6);
+            .exec(PortScanner.GRAB_PORTS_IPV6)
             .catch(e => { console.error(e); return ''; });
 
         // assembe ipv4 and ipv6 output
