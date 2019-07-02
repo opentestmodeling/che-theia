@@ -64,7 +64,7 @@ ARG CDN_PREFIX=""
 ARG MONACO_CDN_PREFIX=""
 WORKDIR ${HOME}/theia-source-code
 
-COPY che-theia/che-theia-init-sources.yml ${HOME}/che-theia-init-sources.yml
+RUN curl https://raw.githubusercontent.com/opentestmodeling/che-theia/master/che-theia-init-sources.yml -o ${HOME}/che-theia-init-sources.yml
 
 #invalidate cache for che-theia extensions
 ADD https://${GITHUB_TOKEN}:x-oauth-basic@api.github.com/repos/eclipse/che-theia/git/${GIT_REF} /tmp/this_branch_info.json
