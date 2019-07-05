@@ -53,8 +53,8 @@ describe("Test Port Scanner with real path", () => {
         portScanner = new PortScanner();
     });
 
-    test("test port opened", async () => {
-        /* check if unhandled exception was thrown. */
-        portScanner.getListeningPorts();
+    test("test no unhandled exception is thrown", async () => {
+        await portScanner.getListeningPorts();
+        await portScanner.getListeningPorts();
     });
 });

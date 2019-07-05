@@ -48,7 +48,7 @@ class DefaultInternalScanner extends AbstractInternalScanner {
             .catch(e => {
                 console.error(e);
                 this.fetchIPV4 = false;
-                return '';
+                return Promise.resolve('');
             }) : '';
     }
 
@@ -57,7 +57,7 @@ class DefaultInternalScanner extends AbstractInternalScanner {
             .catch(e => {
                 console.error(e);
                 this.fetchIPV6 = false;
-                return '';
+                return Promise.resolve('');
             }) : '';
     }
 }
@@ -80,9 +80,9 @@ export class PortScanner {
     public async getListeningPorts(): Promise<Port[]> {
 
         const ipConverter = new IpConverter();
-        const outIPV4 = await this.scanner.getListeningPortV4();
-        const outIPV6 = await this.scanner.getListeningPortV6();
-        const output = [outIPV4, outIPV6].join('\n');
+        const outIPV6 = this.scanner.getListeningPortV6();
+        const outIPV4 = this.scanner.getListeningPortV4();
+        const output = (await Promise.all([outIPV4, outIPV6])).join();
 
         // parse
         const regex = /:\s(.*):(.*)\s[0-9].*\s0A\s/gm;
