@@ -13,7 +13,7 @@ jobs:
   variables:
     - group: che-theia
     - name: organization
-      value: camino
+      value: opentestmodeling
     - name: prefix
       value: optemi
     - name: tag
@@ -37,14 +37,13 @@ jobs:
     displayName: Container registry login
     inputs:
       command: login
-      dockerRegistryEndpoint: camino.azurecr.io
+      dockerRegistryEndpoint: dockerhub-monaka
       containerRegistryType: Container Registry
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
   - script: |
-      docker tag $(organization)/$(prefix)-theia-dev:$(tag) camino.azurecr.io/$(organization)/$(prefix)-theia-dev:$(tag)
-      docker tag $(organization)/$(prefix)-theia:$(tag) camino.azurecr.io/$(organization)/$(prefix)-theia:$(tag)
-      docker push camino.azurecr.io/$(organization)/$(prefix)-theia-dev:$(tag)
-      docker push camino.azurecr.io/$(organization)/$(prefix)-theia:$(tag)
+      docker tag $(organization)/$(prefix)-theia-dev:$(tag) $(organization)/$(prefix)-theia-dev:$(tag)
+      docker tag $(organization)/$(prefix)-theia:$(tag) $(organization)/$(prefix)-theia:$(tag)
+      docker push $(organization)/$(prefix)-theia-dev:$(tag)
+      docker push $(organization)/$(prefix)-theia:$(tag)
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     displayName: Pushing
