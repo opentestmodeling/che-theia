@@ -65,7 +65,7 @@ context('TypeScript', () => {
                     });
                 })
             });
-        }).then(() => {
+        })/*.then(() => {
             // select new folder
             cy.get('.p-TabBar-content > #shell-tab-explorer-view-container > .p-TabBar-tabIcon').click({ force: true }).then(() => {
                 cy.get('#files').contains(FOLDER_NAME).click({ force: true });
@@ -93,7 +93,7 @@ context('TypeScript', () => {
             cy.get('.lines-content.monaco-editor-background').contains('invalid').should('have.class', 'mtk11');
         }).then(() => {
             cy.visit('http://localhost:3100/');
-        });
+        })*/;
     })
 });
 
