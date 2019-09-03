@@ -64,12 +64,11 @@ ARG CDN_PREFIX=""
 ARG MONACO_CDN_PREFIX=""
 WORKDIR ${HOME}/theia-source-code
 
-RUN curl https://raw.githubusercontent.com/opentestmodeling/che-theia/master/che-theia-init-sources.yml -o ${HOME}/che-theia-init-sources.yml
+#add che-theia repository content
+ADD che-theia/che-theia.tar.gz ${HOME}/theia-source-code/che-theia
 
-#invalidate cache for che-theia extensions
-ADD https://${GITHUB_TOKEN}:x-oauth-basic@api.github.com/repos/eclipse/che-theia/git/${GIT_REF} /tmp/this_branch_info.json
-
-RUN che:theia init -c ${HOME}/che-theia-init-sources.yml
+# run che:theia init command and alias che-theia repository to use local sources insted of cloning
+RUN che:theia init -c ${HOME}/theia-source-code/che-theia/che-theia-init-sources.yml --alias https://github.com/eclipse/che-theia=${HOME}/theia-source-code/che-theia
 
 RUN che:theia cdn --theia="${CDN_PREFIX}" --monaco="${MONACO_CDN_PREFIX}"
 
@@ -83,9 +82,6 @@ RUN cd examples/assembly && \
 
 # Run into production mode
 RUN che:theia production
-
-# FIX ME, temporary fix to restore build
-RUN cd che/che-theia && git reset --hard
 
 # Compile plugins
 RUN cd plugins && ./foreach_yarn
