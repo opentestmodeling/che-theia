@@ -23,6 +23,9 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
+  - script: npm install -g node-gyp && npx node-gyp install && yarn
+    displayName: Run yarn.
+
   - script: |
       cd dockerfiles/theia-dev
       ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --prefix:$(prefix)
