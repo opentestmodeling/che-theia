@@ -1,9 +1,9 @@
 <br/>
 <div id="che-theia-logo" align="center" style="vertical-align: middle">
 
-<img src="https://raw.githubusercontent.com/eclipse/che-theia/master/extensions/eclipse-che-theia-about/src/browser/style/che-logo-light.svg?sanitize=true" alt="Che Logo" width="200" />
+<img src="https://raw.githubusercontent.com/eclipse/che-theia/master/extensions/eclipse-che-theia-about/src/browser/style/che-logo-light.svg?sanitize=true" alt="Che Logo" width="200" height="60" />
 
-<img src="https://raw.githubusercontent.com/theia-ide/theia/master/logo/theia-logo.svg?sanitize=true" alt="Theia Logo" width="150"/>
+<img src="https://raw.githubusercontent.com/theia-ide/theia/master/logo/theia-logo.svg?sanitize=true" alt="Theia Logo" width="150" height="60"/>
 
 # Che Theia
 
@@ -12,7 +12,7 @@
 
 <div id="badges" align="center">
 
-  [![Build Status](https://ci.codenvycorp.com/buildStatus/icon?job=che-theia-master-ci)](https://ci.codenvycorp.com/job/che-theia-master-ci)
+  [![Build Status](https://ci.codenvycorp.com/buildStatus/icon?job=che-theia-next)](https://ci.codenvycorp.com/job/che-theia-next)
   [![mattermost](https://img.shields.io/badge/chat-on%20mattermost-blue.svg)](https://mattermost.eclipse.org/eclipse/channels/eclipse-che-ide2-team)
   [![Open questions](https://img.shields.io/badge/Open-questions-blue.svg?style=flat-curved)](https://github.com/eclipse/che/issues?utf8=%E2%9C%93&q=label%3Aarea%2Ftheia+label%3Akind%2Fquestion+)
   [![Open bugs](https://img.shields.io/badge/Open-bugs-red.svg?style=flat-curved)](https://github.com/eclipse/che/issues?utf8=%E2%9C%93&q=label%3Aarea%2Ftheia+label%3Akind%2Fbug+)
@@ -62,6 +62,7 @@ In Che-Theia, you’ll find the following capabilities:
 - [dockerfiles](./dockerfiles) contains Dockerfiles for plugin sidecars, theia-editor and theia builder,
 - [extensions](./extensions) contains Che-Theia specific extensions,
 - [plugins](./plugins) contains Che-Theia plugins.
+- [generator](./generator) contains Che-Theia [generator](./generator/README.md)
 
 Che-theia editor is a container image which contains the Che-theia IDE web application.
 
@@ -83,34 +84,10 @@ Contributing to che-theia section is cover in [CONTRIBUTING.md](https://github.c
 
 ## Build container images
 
-### How to build all the container images
+Building images is required only if you make some changes on `Dockerfile`s inside `dockerfiles` folder.
+If it is about testing che-theia extensions or plugins, please refere to [CONTRIBUTING.md](https://github.com/eclipse/che-theia/blob/master/CONTRIBUTING.md).
 
-If you want to build all images run `build.sh` script.
-
-CI for PR job in this repository will use `build.sh --pr`.
-> Note: `--pr` will build only limited set of docker images, see [PR_IMAGES variable](./docker_image_build.include)
-
-If you want to publish docker images use `build.sh --push`
-
-### How to build own che-theia image with Docker
-
-First you need to build `che-theia-dev` image:
-
-Run in `dockerfiles/theia-dev` dir:
-
-```bash
-    ./build.sh --build-arg:${GITHUB_TOKEN_ARG} --tag:next
-```
-
-Then in `dockerfiles/theia` run:
-
-```bash
-./build.sh --build-args:${GITHUB_TOKEN_ARG},THEIA_VERSION=master --tag:next --branch:master --git-ref:refs\\/heads\\/master
-```
-
-Where `${GITHUB_TOKEN_ARG}` is your GitHub API token, it's used for fetching some vscode library that placed on GitHub releases, without that token build may fail.
-
-That script will clone Theia from master branch and all Che related extensions from theirs master branches.
+To build che-theia docker images, please follow [dockerfiles/theia/README.md](https://github.com/eclipse/che-theia/blob/master/dockerfiles/theia/README.md) instructions.
 
 
 # License
