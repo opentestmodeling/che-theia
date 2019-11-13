@@ -18,8 +18,7 @@
     "@eclipse-che/theia-plugin-ext": "^0.0.1"
   },
   "devDependencies": {
-    "rimraf": "latest",
-    "typescript": "latest"
+    "rimraf": "latest"
   },
   "scripts": {
     "prepare": "yarn run clean && yarn run build",
