@@ -30,7 +30,7 @@
     "@types/tmp": "^0.0.33",
     "@types/webpack": "^4.0.0",
     "@types/yargs": "12.0.1",
-    "jest": "23.6.0",
+    "jest": "24.9.0",
     "json2yaml": "^1.1.0",
     "nexe": "^2.0.0-rc.34",
     "rimraf": "2.6.2",
