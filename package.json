@@ -7,7 +7,7 @@
     "jest": "23.6.0",
     "lerna": "^3.8.1",
     "rimraf": "2.6.2",
-    "ts-jest": "22.4.3",
+    "ts-jest": "24.1.0",
     "tslint": "5.10.0",
     "tslint-language-service": "^0.9.9",
     "typescript": "3.1.3",
