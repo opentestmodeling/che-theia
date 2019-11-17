@@ -29,7 +29,7 @@
     "@types/read-pkg": "3.0.0",
     "@types/tmp": "^0.0.33",
     "@types/webpack": "^4.0.0",
-    "@types/yargs": "12.0.1",
+    "@types/yargs": "13.0.3",
     "jest": "23.6.0",
     "json2yaml": "^1.1.0",
     "nexe": "^2.0.0-rc.34",
