@@ -21,7 +21,7 @@
     "tmp": "^0.0.33"
   },
   "devDependencies": {
-    "@types/fs-extra": "5.0.4",
+    "@types/fs-extra": "8.0.1",
     "@types/jest": "23.3.9",
     "@types/js-yaml": "3.11.2",
     "@types/mustache": "0.8.32",
