@@ -25,15 +25,10 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@eclipse-che/api@^6.16.1":
-  version "6.17.1"
-  resolved "https://registry.yarnpkg.com/@eclipse-che/api/-/api-6.17.1.tgz#bae00a5ac60501566759ff07b134867996ce8964"
-  integrity sha512-kXrUsNJWUkoZfw9wOKgtZH8KYntjXqkyIHNduXMyELFizpV8n94PWBvSj6MeyeKqogKO5QmeC5xvFZS5/I1fkg==
-
-"@eclipse-che/api@^7.0.0-beta-4.0-80162ea6d2":
-  version "7.0.0-beta-4.0-80162ea6d2"
-  resolved "https://registry.yarnpkg.com/@eclipse-che/api/-/api-7.0.0-beta-4.0-80162ea6d2.tgz#f7bb5c7e996332b151e6fb34dae64fc0c4d92619"
-  integrity sha512-CDIfdDV1D5LafVpWcEm2uvWgyAMqpxWTco9BHIXmci4l4ILxEmwdYnVRAye6SU+KqDGi2ZlglhC85ujX5Lb2Hw==
+"@eclipse-che/api@^7.0.0-beta-4.0", "@eclipse-che/api@^7.0.0-beta-4.0-80162ea6d2":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@eclipse-che/api/-/api-7.4.0.tgz#74be0ca037ea2e9702d74971ac2ed8befdcb8a46"
+  integrity sha512-/WDMO6F2lKNuNMAIBmPDYQ22TqGIhrSpK6OaU0aie3qeQa7yxXHtK5nuxyyQGFOZWVdKD9cWisjDyaro7+OM0Q==
 
 "@eclipse-che/api@latest":
   version "7.0.0-beta-4.0"
@@ -48,13 +43,12 @@
     "@eclipse-che/api" latest
 
 "@eclipse-che/workspace-client@latest":
-  version "0.0.1-1564415689"
-  resolved "https://registry.yarnpkg.com/@eclipse-che/workspace-client/-/workspace-client-0.0.1-1564415689.tgz#b03c6ced7955c111ca34a8f3ce989bffabea2f84"
-  integrity sha512-rlRJL9ZDA3iShIHUdaoRkoVeQuLxMuzfmFQ2T6SBEr7BqtAVqCG+BGlpZQ07T7j5U+a2lSNDxKngou5sfAeDng==
+  version "0.0.1-1571058183"
+  resolved "https://registry.yarnpkg.com/@eclipse-che/workspace-client/-/workspace-client-0.0.1-1571058183.tgz#be3e6f3c549b11f13b68a3c5cf22480fee7ba628"
+  integrity sha512-7huU3RmFjCeMpRVgqyFfHMykTD7J4daLziZdoy5oTHIzZWtiH5J3wCsJAo7OZPBXYlmrNQtLFhK05FOav23KYg==
   dependencies:
-    "@eclipse-che/api" "^6.16.1"
+    "@eclipse-che/api" "^7.0.0-beta-4.0"
     axios "0.18.0"
-    moxios "git://github.com/stoplightio/moxios#v1.3.0"
     websocket "1.0.23"
 
 "@evocateur/libnpmaccess@^3.1.2":
@@ -3456,11 +3450,6 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
-
-class-autobind@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/class-autobind/-/class-autobind-0.1.4.tgz#34516c49167cf8d3f639ddc186bcfa2268afff34"
-  integrity sha1-NFFsSRZ8+NP2Od3Bhrz6Imiv/zQ=
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -8252,12 +8241,6 @@ move-concurrently@^1.0.1:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
     run-queue "^1.0.3"
-
-"moxios@git://github.com/stoplightio/moxios#v1.3.0":
-  version "1.3.0"
-  resolved "git://github.com/stoplightio/moxios#9d702c8eafee4b02917d6bc400ae15f1e835cf51"
-  dependencies:
-    class-autobind "^0.1.4"
 
 ms@2.0.0:
   version "2.0.0"
