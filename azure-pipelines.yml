@@ -23,6 +23,10 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.16'
+
   - script: npm install -g node-gyp && npx node-gyp install && yarn
     displayName: Run yarn.
 
