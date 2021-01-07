@@ -2,7 +2,7 @@
 
 ## Build image manually using build scripts
 
-To build all the images you can easily run [build.sh](../../build.sh) script located in the repository root. It will build container with Theia editor, dev container with tools to develop on TypeScript and containers containing remote plugins. 
+To build all the images you can easily run [build.sh](../../build.sh) script located in the repository root. It will build container with Theia editor, dev container with tools to develop on TypeScript and containers containing remote plugins.
 
 ```bash
 ./build.sh
@@ -13,16 +13,16 @@ CI for checking any pull request in this repository runs this script with `--pr`
 `build.sh --pr`.
 ```
 
-**Note**: `--pr` will build only [limited set](../../docker_image_build.include) of docker images.	
+**Note**: `--pr` will build only [limited set](../../build.include) of docker images.
 
-## How to build own Che Theia image with Docker
+## How to build own Che-Theia image with Docker
 
 [Che-Theia](Dockerfile) image is based on [Theia-Dev](../theia-dev/Dockerfile) image, which contains a set of tools for TypeScript development.
 Also theia-dev image includes `@theia/generator-plugin` which can be easily used in both Theia-Dev and Che-Theia containers.
 
 Build script always use current Che-Theia sources. To test your changes you don't need to push your changes somewhere. Just go to `dockerfiles/theia` directory and run:
 
-```bash	
+```bash
 ./build.sh --build-args:GITHUB_TOKEN=${GITHUB_TOKEN},THEIA_VERSION=master --tag:next --branch:master --git-ref:refs\\/heads\\/master
 ```
 
@@ -60,27 +60,20 @@ Parameter `${GITHUB_TOKEN}` is optional. It's necessary only when exceeding the 
 
 **`${THEIA_BRANCH}`**
 
-It specifies tag or branch for base Theia. Build script clones Theia sources, switches to that branch/tag, and only then clones Che-Theia.
+It specifies tag or branch for upstream Theia. Build script clones Theia sources, switches to that branch/tag, and only then clones Che-Theia.
 
 Parameter `${THEIA_BRANCH}` is optional. If it's not specified, the default value `'master'` will be used.
 
 
-CI generates several tags of [docker images](https://hub.docker.com/r/eclipse/che-theia/tags). Below is the list of images:
+CI generates several tags of [docker images](https://quay.io/repository/eclipse/che-theia?tab=tags). Below is the list of images:
 
 - `eclipse/che-theia:next`
   - theia branch: [master](https://github.com/theia-ide/theia/)
   - che-theia branch: [master](https://github.com/eclipse/che-theia)
-  - CI [build job](https://ci.codenvycorp.com/job/che-theia-next/)
+  - CI [build job](https://ci.centos.org/view/Devtools/job/devtools-che-theia-che-build-master/)
+  - CI [nightly build job](https://ci.centos.org/view/Devtools/job/devtools-che-theia-che-nightly/)
 
-- `eclipse/che-theia:7.0.0-next` Che-Theia 7.0.0 with the latest changes
-  - theia branch: [che-7.0.0](https://github.com/theia-ide/theia/tree/che-7.0.0)
-  - che-theia branch: [7.0.0](https://github.com/eclipse/che-theia/tree/7.0.0)
-  - CI [build job](https://ci.codenvycorp.com/job/che-theia-7.0.0-next/)
-
-- `eclipse/che:theia:latest` the latest stable Che-Theia 7.0.0 release
-  - theia branch: [che-7.0.0](https://github.com/theia-ide/theia/tree/che-7.0.0)
-  - che-theia tag: [v7.0.0-rc-4.0](https://github.com/eclipse/che-theia/tree/v7.0.0-rc-4.0)
-
+- `eclipse/che-theia:latest` the latest stable Che-Theia 7.x release, updates on each release by CI [release job](https://ci.centos.org/view/Devtools/job/devtools-che-theia-che-release/)
 
 ## Theia version
 
@@ -100,11 +93,11 @@ A newly created docker image will have this version. Passing `'--tag:1.0.0'` to 
 
 Parameter `${IMAGE_TAG}` is optioal. If it's not specified, the default value `'next'` will be used.
 
-## Theia Git Prefs
+## Theia Git refs
 
 **`${THEIA_GIT_REFS}`**
 
-Is used to invalidate docker cache when the current che-theia branch has been changed after last build of the dockerfile. If you are building che-theia from your branch, you have to set refs to `'refs\\/heads\\/${THE_BRANCH_NAME}'`.
+Is used to invalidate docker cache when upstream Theia has been changed in branch `${THEIA_BRANCH}` after last build of the image. If you are building che-theia based on upstream Theia from your branch, you have to set refs to `'refs\\/heads\\/${THEIA_BRANCH}'`.
 
 This parameter is optional. Default value is `'refs\\/heads\\/master'`.
 
@@ -114,7 +107,18 @@ This parameter is optional. Default value is `'refs\\/heads\\/master'`.
 
 Add this parameter to the build command to have a quick build and to skip running tests in dedicated container.
 
-By default tests are turned on. 
+By default tests are turned on.
+
+## Build only for specific type of Docker images (Alpine, UBI8, etc.)
+
+**`--dockerfile`**
+
+Add this parameter to the build command to select the subset of images to build.
+- `--dockerfile:Dockerfile.alpine` to build only Alpine Images.
+- `--dockerfile:Dockerfile.ubi8` to build only UBI8 Images.
+
+
+By default it is both building Alpine and Ubi8 images
 
 ## CDN Support
 
@@ -137,7 +141,7 @@ such as http://unpkg.com/ or https://www.jsdelivr.com/.
 
 NPM version number and file paths are added automatically by the Che-Theia CDN support.
 
-For example, using JSDelivr, the following build argument should be added: `MONACO_CDN_PREFIX=https://cdn.jsdelivr.net/npm/`. 
+For example, using JSDelivr, the following build argument should be added: `MONACO_CDN_PREFIX=https://cdn.jsdelivr.net/npm/`.
 
 Alternatively, if `CDN_PREFIX` and `MONACO_CDN_PREFIX` are provided as **environment variables**, the corresponding build arguments
 will be added automatically by the `build.sh` script. This will make CDN support configuration easier in CI builds.

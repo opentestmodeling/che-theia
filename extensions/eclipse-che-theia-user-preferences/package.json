@@ -13,26 +13,29 @@
   ],
   "dependencies": {
     "@theia/core": "next",
-    "nsfw": "^1.2.2",
+    "@theia/workspace": "next",
+    "nsfw": "^1.2.9",
     "@theia/preferences": "next",
     "@eclipse-che/theia-plugin-ext": "^0.0.1"
   },
   "devDependencies": {
-    "rimraf": "latest",
-    "typescript": "latest"
+    "rimraf": "latest"
   },
   "scripts": {
     "prepare": "yarn run clean && yarn run build",
     "clean": "rimraf lib",
-    "format": "tsfmt -r --useTsfmt ../../configs/tsfmt.json",
-    "lint": "tslint -c ../../configs/tslint.json --project tsconfig.json",
+    "format": "if-env SKIP_FORMAT=true && echo 'skip format check' || prettier --check '{src,tests}/**/*.ts' package.json",
+    "format:fix": "prettier --write '{src,tests}/**/*.ts' package.json",
+    "lint": "if-env SKIP_LINT=true && echo 'skip lint check' || eslint --cache=true --no-error-on-unmatched-pattern=true '{src,tests}/**/*.ts'",
+    "lint:fix": "eslint --fix --cache=true --no-error-on-unmatched-pattern=true \"{src,tests}/**/*.{ts,tsx}\"",
     "compile": "tsc",
     "build": "concurrently -n \"format,lint,compile\" -c \"red,green,blue\" \"yarn format\" \"yarn lint\" \"yarn compile\"",
     "watch": "tsc -w"
   },
   "theiaExtensions": [
     {
-      "backend": "lib/node/che-theia-user-preferences-backend-module"
+      "backend": "lib/node/che-theia-user-preferences-backend-module",
+      "frontend": "lib/browser/che-theia-user-preferences-frontend-module"
     }
   ]
 }

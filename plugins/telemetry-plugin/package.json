@@ -1,0 +1,38 @@
+{
+  "name": "@eclipse-che/telemetry-plugin",
+  "version": "0.0.1",
+  "publisher": "Eclipse Che",
+  "keywords": [
+    "theia-plugin"
+  ],
+  "description": "Manage Eclipse Che Telemetry Plugin",
+  "license": "EPL-2.0",
+  "files": [
+    "src"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "devDependencies": {
+    "@theia/plugin": "next",
+    "@theia/plugin-packager": "latest",
+    "@eclipse-che/plugin": "0.0.1"
+  },
+  "scripts": {
+    "prepare": "yarn run clean && yarn run build",
+    "clean": "rimraf lib",
+    "format": "if-env SKIP_FORMAT=true && echo 'skip format check' || prettier --check '{src,tests}/**/*.ts' package.json",
+    "format:fix": "prettier --write '{src,tests}/**/*.ts' package.json",
+    "lint": "if-env SKIP_LINT=true && echo 'skip lint check' || eslint --cache=true --no-error-on-unmatched-pattern=true '{src,tests}/**/*.ts'",
+    "lint:fix": "eslint --fix --cache=true --no-error-on-unmatched-pattern=true \"{src,tests}/**/*.{ts,tsx}\"",
+    "compile": "tsc",
+    "build": "concurrently -n \"format,lint,compile\" -c \"red,green,blue\" \"yarn format\" \"yarn lint\" \"yarn compile\" && theia-plugin pack",
+    "watch": "tsc -w"
+  },
+  "engines": {
+    "theiaPlugin": "next"
+  },
+  "theiaPlugin": {
+    "backend": "lib/telemetry-plugin.js"
+  }
+}

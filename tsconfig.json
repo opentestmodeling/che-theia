@@ -3,17 +3,17 @@
     "compilerOptions": {
         "skipLibCheck": false,
         "baseUrl": ".",
-        "paths": {},
-        "plugins": [
-            {
-                "name": "tslint-language-service"
-            }
-        ]
+        "paths": {}
     },
     "include": [
         "dev-packages/*/src",
+        "generator/src",
+        "generator/tests",
         "plugins/*/src",
-        "extensions/*/src"
+        "plugins/*/tests",
+        "extensions/*/src",
+        "extensions/*/tests",
+        "tools/*/src"
     ],
     "types": [
         "node", "jest"

@@ -1,0 +1,59 @@
+{
+  "name": "@eclipse-che/theia-git-provisioner",
+  "keywords": [
+    "theia-extension",
+    "che",
+    "preferences"
+  ],
+  "version": "0.0.1",
+  "license": "EPL-2.0",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "dependencies": {
+    "@eclipse-che/theia-plugin-ext": "^0.0.1",
+    "@theia/core": "next",
+    "@theia/preferences": "next",
+    "ini": "^1.3.5",
+    "nsfw": "^1.2.9",
+    "@eclipse-che/theia-user-preferences-synchronizer": "0.0.1"
+  },
+  "devDependencies": {
+    "@types/ini": "^1.3.5"
+  },
+  "scripts": {
+    "prepare": "yarn run clean && yarn run build",
+    "clean": "rimraf lib",
+    "format": "if-env SKIP_FORMAT=true && echo 'skip format check' || prettier --check '{src,tests}/**/*.ts' package.json",
+    "format:fix": "prettier --write '{src,tests}/**/*.ts' package.json",
+    "lint": "if-env SKIP_LINT=true && echo 'skip lint check' || eslint --cache=true --no-error-on-unmatched-pattern=true '{src,tests}/**/*.ts'",
+    "lint:fix": "eslint --fix --cache=true --no-error-on-unmatched-pattern=true \"{src,tests}/**/*.{ts,tsx}\"",
+    "compile": "tsc",
+    "build": "concurrently -n \"format,lint,compile\" -c \"red,green,blue\" \"yarn format\" \"yarn lint\" \"yarn compile\"",
+    "test": "if-env SKIP_TEST=true && echo 'skip test' || jest --forceExit",
+    "watch": "tsc -w"
+  },
+  "theiaExtensions": [
+    {
+      "frontend": "lib/browser/git-frontend-module",
+      "backend": "lib/node/git-backend-module"
+    }
+  ],
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "**/tests/*.(ts)"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/tests/mock.js"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ]
+  }
+}

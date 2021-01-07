@@ -1,10 +1,10 @@
-# Global Owners
-* @evidolob @vparfonov @l0rd @rhopp
+# Default Owners
+* @azatsarynnyy @benoitf
 
-# dockerfiles
-dockerfiles/** @benoitf @evidolob @vparfonov @l0rd @rhopp
-plugins/** @sunix @vitaliy-guliy @olexii4 @vparfonov @l0rd @rhopp
-extensions/** @mmorhun @evidolob @vparfonov @l0rd @rhopp
-che-plugins/** @evidolob @tolusha @vparfonov @l0rd @rhopp
-extensions/eclipse-che-theia-terminal/** @AndrienkoAleksandr @vparfonov @l0rd @rhopp
-
+# custom folders
+configs/** @azatsarynnyy @RomanNikitenko @vzhukovs @benoitf
+devfiles/** @azatsarynnyy @RomanNikitenko @vzhukovs @benoitf
+dockerfiles/** @azatsarynnyy @RomanNikitenko @vzhukovs @benoitf
+extensions/** @azatsarynnyy @RomanNikitenko @vzhukovs @benoitf
+generator/** @azatsarynnyy @RomanNikitenko @vzhukovs @benoitf
+plugins/** @ericwill @vinokurig @vitaliy-guliy @svor @tsmaeder @benoitf

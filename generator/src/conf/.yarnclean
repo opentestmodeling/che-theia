@@ -28,11 +28,9 @@ dugite/git/*
 onigasm
 oniguruma
 @theia/monaco
-monaco-css
 react-dom
 font-awesome
-monaco-html
-@typefox/monaco-editor-core
+@theia/monaco-editor-core
 @theia/terminal/node_modules/xterm/dist/xterm.js
 
 # MD files
@@ -53,7 +51,6 @@ __tests__
 test
 tests
 powered-test
-test.js
 *.spec.js
 testData
 

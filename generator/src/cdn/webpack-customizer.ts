@@ -1,14 +1,15 @@
-/*********************************************************************
-* Copyright (c) 2018 Red Hat, Inc.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-**********************************************************************/
+/**********************************************************************
+ * Copyright (c) 2018-2020 Red Hat, Inc.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ ***********************************************************************/
 
 const path = require('path');
+
 import * as webpack from 'webpack';
 const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -16,10 +17,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 export function customizeWebpackConfig(
     cdn: string,
     monacopkg: string,
-    monacohtmlcontribpkg: string,
-    monacocsscontribpkg: string,
-    baseConfig: any): any {
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    baseConfig: any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any {
     let theiaCDN = '';
     let monacoCDN = '';
 
@@ -31,13 +32,11 @@ export function customizeWebpackConfig(
         }
     }
 
-    if (monacoCDN &&
-        !(monacopkg && monacohtmlcontribpkg && monacocsscontribpkg)) {
-        throw new Error("Please check that you specified the three parameters: '--env.monacopkg', '--env.monacohtmlcontribpkg', '--env.monacocsscontribpkg'");
+    if (monacoCDN && !monacopkg) {
+        throw new Error("Please check that you specified the parameter '--env.monacopkg'");
     }
 
     if (theiaCDN || monacoCDN) {
-
         const assemblyRoot = path.resolve(__dirname, '..');
         const theiaRoot = path.resolve(assemblyRoot, '..', '..');
         const frontendIndex = path.resolve(assemblyRoot, 'src-gen', 'frontend', 'index.js');
@@ -49,7 +48,7 @@ export function customizeWebpackConfig(
         const originalEntry = baseConfig.entry;
         baseConfig.entry = {
             'cdn-support': path.resolve(__dirname, 'bootstrap.js'),
-            'theia': originalEntry
+            theia: originalEntry,
         };
 
         // Include the content hash to enable long-term caching
@@ -62,10 +61,10 @@ export function customizeWebpackConfig(
             splitChunks: {
                 cacheGroups: {
                     che: {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         test(module: any, chunks: any) {
                             const req = module.userRequest;
-                            const takeit = req && (req.endsWith(frontendIndex) ||
-                                req.includes(cheExtensions));
+                            const takeit = req && (req.endsWith(frontendIndex) || req.includes(cheExtensions));
                             if (takeit) {
                                 console.info('Added in Che chunk: ', module.userRequest);
                             }
@@ -74,34 +73,34 @@ export function customizeWebpackConfig(
                         name: 'che',
                         chunks: 'all',
                         enforce: true,
-                        priority: 1
+                        priority: 1,
                     },
                     vendors: {
                         test: /[\/]node_modules[\/](?!@theia[\/])/,
                         name: 'vendors',
                         chunks: 'all',
-                        enforce: true
-                    }
-                }
-            }
+                        enforce: true,
+                    },
+                },
+            },
         };
 
         // Use our own HTML template to trigger the CDN-supporting
         // logic, with the CDN prefixes passed as env parameters
-        baseConfig.plugins.push(new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: 'cdn/custom-html.html',
-            inject: false,
-            customparams: {
-                cdnPrefix: theiaCDN,
-                monacoCdnPrefix: monacoCDN,
-                cachedChunkRegexp: '^(theia|che|vendors)\.[^.]+\.js$',
-                cachedResourceRegexp: '^.*\.(wasm|woff2|gif)$',
-                monacoEditorCorePackage: monacopkg,
-                monacoHtmlContribPackage: monacohtmlcontribpkg,
-                monacoCssContribPackage: monacocsscontribpkg
-            }
-        }));
+        baseConfig.plugins.push(
+            new HtmlWebpackPlugin({
+                filename: 'index.html',
+                template: 'cdn/custom-html.html',
+                inject: false,
+                customparams: {
+                    cdnPrefix: theiaCDN,
+                    monacoCdnPrefix: monacoCDN,
+                    cachedChunkRegexp: '^(theia|che|vendors).[^.]+.js$',
+                    cachedResourceRegexp: '^.*.(wasm|woff2|gif)$',
+                    monacoEditorCorePackage: monacopkg,
+                },
+            })
+        );
 
         // Use hashed module IDs to ease caching support
         // and avoid the hash-based chunk names being changed
@@ -110,10 +109,14 @@ export function customizeWebpackConfig(
 
         // Insert a custom loader to override file and url loaders,
         // in order to insert CDN-related logic
-        baseConfig.module.rules.filter((rule: any) => rule.loader && rule.loader.match(/(file-loader|url-loader)/))
+        baseConfig.module.rules
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .filter((rule: any) => rule.loader && rule.loader.match(/(file-loader|url-loader)/))
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .forEach((rule: any) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const originalLoader: any = {
-                    loader: rule.loader
+                    loader: rule.loader,
                 };
 
                 if (rule.options) {
@@ -126,7 +129,7 @@ export function customizeWebpackConfig(
                     {
                         loader: path.resolve('cdn/webpack-loader.js'),
                     },
-                    originalLoader
+                    originalLoader,
                 ];
             });
     }

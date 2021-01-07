@@ -1,130 +1,141 @@
-/********************************************************************************
- * Copyright (C) 2019 Red Hat, Inc. and others.
+/**********************************************************************
+ * Copyright (c) 2018-2020 Red Hat, Inc.
  *
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License v. 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0.
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
- * This Source Code may also be made available under the following Secondary
- * Licenses when the conditions for such availability set forth in the Eclipse
- * Public License v. 2.0 are satisfied: GNU General Public License, version 2
- * with the GNU Classpath Exception which is available at
- * https://www.gnu.org/software/classpath/license.html.
- *
- * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
- ********************************************************************************/
+ * SPDX-License-Identifier: EPL-2.0
+ ***********************************************************************/
 
-import { injectable, inject } from 'inversify';
+import { ChePluginCommandContribution, ChePluginManagerCommands } from './che-plugin-command-contribution';
+import { Emitter, Event } from '@theia/core/lib/common';
+import { inject, injectable } from 'inversify';
+
 import { Menu } from '@phosphor/widgets';
 import { CommandRegistry as PhosphorCommandRegistry } from '@phosphor/commands';
-import { Emitter, Event } from '@theia/core/lib/common';
-import { ChePluginManager } from './che-plugin-manager';
-import { ChePluginManagerCommands, ChePluginCommandContribution } from './che-plugin-command-contribution';
-import { MenuModelRegistry, CommandRegistry } from '@theia/core/lib/common';
-import { CommonMenus } from '@theia/core/lib/browser';
 
 @injectable()
 export class ChePluginMenu {
+  @inject(ChePluginCommandContribution)
+  protected readonly chePluginCommandContribution: ChePluginCommandContribution;
 
-    @inject(ChePluginCommandContribution)
-    protected readonly chePluginCommandContribution: ChePluginCommandContribution;
+  protected readonly menuClosed = new Emitter<void>();
 
-    @inject(ChePluginManager)
-    protected readonly chePluginManager: ChePluginManager;
+  get onMenuClosed(): Event<void> {
+    return this.menuClosed.event;
+  }
 
-    protected readonly menuClosed = new Emitter<void>();
+  show(x: number, y: number): void {
+    const commands = new PhosphorCommandRegistry();
+    const menu = new Menu({
+      commands,
+    });
 
-    /**
-     * TEMPORARY SOLUTION
-     *
-     * Following code removes 'View/Plugins' menu item and the command that displays/hides Plugins view.
-     * In the future we will try to refactor Che Plugins view and move it to the 'plugin-ext'.
-     */
-    constructor(
-        @inject(MenuModelRegistry) menuModelRegistry: MenuModelRegistry,
-        @inject(CommandRegistry) commandRegistry: CommandRegistry
-    ) {
-        menuModelRegistry.unregisterMenuAction('pluginsView:toggle', CommonMenus.VIEW_VIEWS);
-        commandRegistry.unregisterCommand('pluginsView:toggle');
-    }
+    this.addCommands(commands, menu);
 
-    get onMenuClosed(): Event<void> {
-        return this.menuClosed.event;
-    }
+    menu.aboutToClose.connect(() => {
+      this.menuClosed.fire(undefined);
+    });
 
-    show(x: number, y: number): void {
-        const commands = new PhosphorCommandRegistry();
-        const menu = new Menu({
-            commands
-        });
+    menu.open(x, y);
+  }
 
-        this.addCommands(commands, menu);
+  /**
+   * Adds commands to the menu for running plugin.
+   */
+  protected addCommands(commands: PhosphorCommandRegistry, menu: Menu): void {
+    commands.addCommand(ChePluginManagerCommands.SHOW_AVAILABLE_PLUGINS.id, {
+      label: ChePluginManagerCommands.SHOW_AVAILABLE_PLUGINS.label,
+      execute: () => this.showAvailablePlugins(),
+    });
 
-        menu.aboutToClose.connect(() => {
-            this.menuClosed.fire(undefined);
-        });
+    commands.addCommand(ChePluginManagerCommands.SHOW_INSTALLED_PLUGINS.id, {
+      label: ChePluginManagerCommands.SHOW_INSTALLED_PLUGINS.label,
+      execute: () => this.showInstalledPlugins(),
+    });
 
-        menu.open(x, y);
-    }
+    commands.addCommand(ChePluginManagerCommands.SHOW_BUILT_IN_PLUGINS.id, {
+      label: ChePluginManagerCommands.SHOW_BUILT_IN_PLUGINS.label,
+      execute: () => this.showBuiltInPlugins(),
+    });
 
-    /**
-     * Adds commands to the menu for running plugin.
-     */
-    protected addCommands(commands: PhosphorCommandRegistry, menu: Menu): void {
+    commands.addCommand(ChePluginManagerCommands.ADD_REGISTRY.id, {
+      label: ChePluginManagerCommands.ADD_REGISTRY.label,
+      execute: () => this.chePluginCommandContribution.addPluginRegistry(),
+    });
 
-        commands.addCommand(ChePluginManagerCommands.SHOW_AVAILABLE_PLUGINS.id, {
-            label: ChePluginManagerCommands.SHOW_AVAILABLE_PLUGINS.label,
-            execute: () => this.chePluginCommandContribution.showAvailablePlugins()
-        });
+    commands.addCommand(ChePluginManagerCommands.REFRESH.id, {
+      label: ChePluginManagerCommands.REFRESH.label,
+      execute: () => this.refreshPluginList(),
+    });
 
-        commands.addCommand(ChePluginManagerCommands.SHOW_INSTALLED_PLUGINS.id, {
-            label: ChePluginManagerCommands.SHOW_INSTALLED_PLUGINS.label,
-            execute: () => this.chePluginCommandContribution.showInstalledPlugins()
-        });
+    menu.addItem({
+      type: 'command',
+      command: ChePluginManagerCommands.SHOW_AVAILABLE_PLUGINS.id,
+    });
 
-        commands.addCommand(ChePluginManagerCommands.SHOW_BUILT_IN_PLUGINS.id, {
-            label: ChePluginManagerCommands.SHOW_BUILT_IN_PLUGINS.label,
-            execute: () => this.chePluginCommandContribution.showBuiltInPlugins()
-        });
+    menu.addItem({
+      type: 'command',
+      command: ChePluginManagerCommands.SHOW_INSTALLED_PLUGINS.id,
+    });
 
-        commands.addCommand(ChePluginManagerCommands.CHANGE_REGISTRY.id, {
-            label: ChePluginManagerCommands.CHANGE_REGISTRY.label,
-            execute: () => this.chePluginCommandContribution.changePluginRegistry()
-        });
+    menu.addItem({
+      type: 'command',
+      command: ChePluginManagerCommands.SHOW_BUILT_IN_PLUGINS.id,
+    });
 
-        commands.addCommand(ChePluginManagerCommands.ADD_REGISTRY.id, {
-            label: ChePluginManagerCommands.ADD_REGISTRY.label,
-            execute: () => this.chePluginCommandContribution.addPluginRegistry()
-        });
+    menu.addItem({
+      type: 'separator',
+    });
 
-        menu.addItem({
-            type: 'command',
-            command: ChePluginManagerCommands.SHOW_AVAILABLE_PLUGINS.id
-        });
+    menu.addItem({
+      type: 'command',
+      command: ChePluginManagerCommands.ADD_REGISTRY.id,
+    });
 
-        menu.addItem({
-            type: 'command',
-            command: ChePluginManagerCommands.SHOW_INSTALLED_PLUGINS.id
-        });
+    menu.addItem({
+      type: 'command',
+      command: ChePluginManagerCommands.REFRESH.id,
+    });
+  }
 
-        menu.addItem({
-            type: 'command',
-            command: ChePluginManagerCommands.SHOW_BUILT_IN_PLUGINS.id
-        });
+  /********************************************************************************
+   * Changing current filter
+   ********************************************************************************/
 
-        menu.addItem({
-            type: 'separator'
-        });
+  protected readonly changeFilterEvent = new Emitter<string>();
 
-        menu.addItem({
-            type: 'command',
-            command: ChePluginManagerCommands.CHANGE_REGISTRY.id
-        });
+  get onChangeFilter(): Event<string> {
+    return this.changeFilterEvent.event;
+  }
 
-        menu.addItem({
-            type: 'command',
-            command: ChePluginManagerCommands.ADD_REGISTRY.id
-        });
-    }
+  async showAvailablePlugins(): Promise<void> {
+    this.changeFilterEvent.fire('');
+  }
 
+  // @installed
+  async showInstalledPlugins(): Promise<void> {
+    this.changeFilterEvent.fire('@installed');
+  }
+
+  // @builtin
+  // Displays a list of built in plugins provided inside Theia editor container.
+  async showBuiltInPlugins(): Promise<void> {
+    this.changeFilterEvent.fire('@builtin');
+  }
+
+  /********************************************************************************
+   * Refreshing the list of plugins
+   ********************************************************************************/
+
+  protected readonly refreshPluginListEvent = new Emitter<void>();
+
+  get onRefreshPluginList(): Event<void> {
+    return this.refreshPluginListEvent.event;
+  }
+
+  async refreshPluginList(): Promise<void> {
+    this.refreshPluginListEvent.fire();
+  }
 }

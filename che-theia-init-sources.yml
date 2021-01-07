@@ -11,11 +11,21 @@ sources:
     - extensions/eclipse-che-theia-activity-tracker
     - extensions/eclipse-che-theia-about
     - extensions/eclipse-che-theia-preferences-provider-extension
+    - extensions/eclipse-che-theia-git-provisioner
+    - extensions/eclipse-che-theia-logging
+    - extensions/eclipse-che-theia-messaging
+    - extensions/eclipse-che-theia-mini-browser
+    - extensions/eclipse-che-theia-file-sync-tracker
+    - extensions/eclipse-che-theia-cli-endpoint
+    - extensions/eclipse-che-theia-workspace
+    - extensions/eclipse-che-theia-remote-api
   plugins:
     - plugins/containers-plugin
-    - plugins/factory-plugin
+    - plugins/workspace-plugin
     - plugins/ports-plugin
     - plugins/task-plugin
     - plugins/welcome-plugin
     - plugins/ssh-plugin
+    - plugins/telemetry-plugin
+    - plugins/github-auth-plugin
   checkoutTo: master

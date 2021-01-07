@@ -12,26 +12,28 @@ base_dir=$(cd "$(dirname "$0")"; pwd)
 
 
 DIR=$(cd "$(dirname "$0")"; pwd)
-LOCAL_ASSEMBLY_DIR="${DIR}"/generator
 
-if [ -d "${LOCAL_ASSEMBLY_DIR}" ]; then
-  rm -r "${LOCAL_ASSEMBLY_DIR}"
+CHE_THEIA_GENERATOR_PACKAGE_NAME=eclipse-che-theia-generator.tgz
+CHE_THEIA_GENERATOR_PACKAGE="${base_dir}/../../generator/${CHE_THEIA_GENERATOR_PACKAGE_NAME}"
+# Rebuild Che-Theia generator if:
+#  - it hasn't been built yet
+#  - there is any changes in the generator directory
+#  - there is a commit newer than the generator build time
+cd "${base_dir}/../../"
+if [ ! -f "$CHE_THEIA_GENERATOR_PACKAGE" ] || \
+   [ -n "$(git status generator --porcelain)" ] || \
+   [ $(git log -1 --pretty=%ct -- generator) -gt $(date -r $CHE_THEIA_GENERATOR_PACKAGE +%s) ]
+then
+    # Delete previous archive if any
+    rm -f $CHE_THEIA_GENERATOR_PACKAGE
+    echo "Building Che-Theia generator"
+    cd "${base_dir}"/../../generator/ && yarn && yarn pack --filename $CHE_THEIA_GENERATOR_PACKAGE_NAME
 fi
+echo "Copying Che-Theia generator"
+cp "${CHE_THEIA_GENERATOR_PACKAGE}" "${base_dir}/asset-${CHE_THEIA_GENERATOR_PACKAGE_NAME}"
 
-#in mac os 'cp' cannot create destination dir, so create it first
-mkdir ${LOCAL_ASSEMBLY_DIR}
-
-FILE="${base_dir}"/../../generator/eclipse-che-theia-generator.tgz
-if [ -f "$FILE" ]; then
-    cp "${FILE}" "${LOCAL_ASSEMBLY_DIR}"
-else 
-    echo "$FILE does not exist, trying to generate..."
-    (cd "${base_dir}"/../../generator/ && yarn prepare && yarn pack --filename eclipse-che-theia-generator.tgz)
-    cp "${FILE}" "${LOCAL_ASSEMBLY_DIR}"
-fi
+rm -rf ${base_dir}/asset-unpacked-generator && mkdir ${base_dir}/asset-unpacked-generator
+tar zxf "${base_dir}/asset-${CHE_THEIA_GENERATOR_PACKAGE_NAME}" --strip-components=1 -C ${base_dir}/asset-unpacked-generator
 
 init --name:theia-dev "$@"
 build
-if ! skip_tests; then
-  bash "${base_dir}"/e2e/build.sh "$@"
-fi
