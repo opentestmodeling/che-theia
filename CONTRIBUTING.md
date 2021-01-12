@@ -36,7 +36,7 @@ All containers have `/projects` folder mounted, which is shared among them.
 Developer workflow:
 
 1. Start the workspace with the devfile, it is cloning Theia and the che-theia plugins.
-2. Setup Theia sources to include Che-theia extension thanks to `che:theia init` command (Che-theia dev container)
+2. Setup Theia sources to include Che-theia extension thanks to `che-theia init` command (Che-theia dev container)
 3. ….. [ Code on theia or che-theia extension ]
 4. Build che-theia (theia + che-theia extensions) (Che-theia dev container)
 5. …...[ Code on the a plugin project ]
@@ -66,7 +66,7 @@ You can use the che command `init ... DEV che-theia` (command pallette > Run tas
 Basically, this command will perform:
 ```
 [che-dev]
-$ che:theia init --dev
+$ che-theia init --dev
 ```
 
 This command will checkout all extensions in `/projects/theia/che` folder and create symbolic link into `/projects/theia/packages` folder.
@@ -82,11 +82,11 @@ Basically, this command will perform:
 ```
 [che-dev]
 $ yarn
-$ che:theia production
+$ che-theia production
 ```
 
-- `yarn` will compile theia + additional Che-theia extensions that have been setted up by `che:theia init`
-- `che:theia production` will generate a production like package.
+- `yarn` will compile theia + additional Che-theia extensions that have been setted up by `che-theia init`
+- `che-theia production` will generate a production like package.
 
 ### Step 5: Code che-theia plugins
 At this stage, you can code on Che-theia plugins. In this devfile, containers and factory plugin are covered.

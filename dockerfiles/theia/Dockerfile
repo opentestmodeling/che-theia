@@ -67,10 +67,10 @@ WORKDIR ${HOME}/theia-source-code
 #add che-theia repository content
 ADD che-theia/che-theia.tar.gz ${HOME}/theia-source-code/che-theia
 
-# run che:theia init command and alias che-theia repository to use local sources insted of cloning
-RUN che:theia init -c ${HOME}/theia-source-code/che-theia/che-theia-init-sources.yml --alias https://github.com/eclipse/che-theia=${HOME}/theia-source-code/che-theia
+# run che-theia init command and alias che-theia repository to use local sources insted of cloning
+RUN che-theia init -c ${HOME}/theia-source-code/che-theia/che-theia-init-sources.yml --alias https://github.com/eclipse/che-theia=${HOME}/theia-source-code/che-theia
 
-RUN che:theia cdn --theia="${CDN_PREFIX}" --monaco="${MONACO_CDN_PREFIX}"
+RUN che-theia cdn --theia="${CDN_PREFIX}" --monaco="${MONACO_CDN_PREFIX}"
 
 # Compile Theia
 RUN yarn
@@ -81,7 +81,7 @@ RUN cd examples/assembly && \
              @opentestmodeling/vstep-ngt-core-sprotty@0.8.0-next.2
 
 # Run into production mode
-RUN che:theia production
+RUN che-theia production
 
 # Compile plugins
 RUN cd plugins && ./foreach_yarn
