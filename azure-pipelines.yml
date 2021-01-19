@@ -42,7 +42,7 @@ jobs:
 
       - script: |
           cd dockerfiles/theia-dev
-          ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --prefix:$(prefix)
+          ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --branch:v0.8.0 --prefix:$(prefix)
         displayName: Building theia-dev
 
       - script: |
