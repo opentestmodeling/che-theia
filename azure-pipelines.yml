@@ -58,8 +58,6 @@ jobs:
           containerRegistryType: Container Registry
 
       - script: |
-          docker tag $(organization)/$(prefix)-theia-dev:$(tag) $(organization)/$(prefix)-theia-dev:$(tag)
-          docker tag $(organization)/$(prefix)-theia:$(tag) $(organization)/$(prefix)-theia:$(tag)
           docker push $(organization)/$(prefix)-theia-dev:$(tag)
           docker push $(organization)/$(prefix)-theia:$(tag)
         condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
