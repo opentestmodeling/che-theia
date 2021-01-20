@@ -42,6 +42,7 @@ RUN if [ ! -z "${GITHUB_TOKEN-}" ]; then \
     fi
 
 #invalidate cache
+RUN echo https://${GITHUB_TOKEN}:x-oauth-basic@api.github.com/repos/${THEIA_GITHUB_REPO}/git/${GIT_REF} /tmp/branch_info.json
 ADD https://${GITHUB_TOKEN}:x-oauth-basic@api.github.com/repos/${THEIA_GITHUB_REPO}/git/${GIT_REF} /tmp/branch_info.json
 
 # Clone theia
