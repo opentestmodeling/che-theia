@@ -54,7 +54,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
     # Install typescript@2.9.2 and node-gyp
 
-    &&  yarn global add typescript@2.9.2 node-gyp
+    &&  yarn global add typescript@2.9.2 node-gyp \
+    &&  node-gyp install
 
 ENV HOME=/home/theia
 COPY --from=endpoint /home/theia /home/theia
@@ -92,5 +93,5 @@ ENV ASPNETCORE_URLS=http://+:80 \
     NUGET_XMLDOC_MODE=skip
 
 # Trigger first run experience by running arbitrary cmd to populate local package cache
-RUN dotnet --version
+RUN dotnet help
 ENTRYPOINT ["/entrypoint.sh"]
