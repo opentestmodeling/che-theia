@@ -42,12 +42,12 @@ jobs:
 
       - script: |
           cd dockerfiles/theia-dev
-          ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --branch:v0.8.0 --prefix:$(prefix)
+          ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --branch:v0.11.0 --prefix:$(prefix)
         displayName: Building theia-dev
 
       - script: |
           cd dockerfiles/theia
-          ./build.sh --build-args:GITHUB_TOKEN=$(github_token),THEIA_VERSION=v0.8.0 --tag:$(tag) --prefix:$(prefix) --branch:v0.8.0 --organization:$(organization)
+          ./build.sh --build-args:GITHUB_TOKEN=$(github_token),THEIA_VERSION=v0.11.0 --tag:$(tag) --prefix:$(prefix) --branch:v0.11.0 --organization:$(organization)
         displayName: Building Theia
 
       - task: Docker@1
