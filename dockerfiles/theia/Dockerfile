@@ -66,8 +66,8 @@ RUN if [ -z $GITHUB_TOKEN ]; then unset GITHUB_TOKEN; fi && \
 
 # Add more extensions
 RUN cd examples/assembly && \
-    yarn add @opentestmodeling/vstep-ngt-core-dsl@0.8.0-next.2 \
-             @opentestmodeling/vstep-ngt-core-sprotty@0.8.0-next.2
+    yarn add @opentestmodeling/vstep-ngt-core-dsl@0.11.0-alpha.21acccb8 \
+             @opentestmodeling/vstep-ngt-core-sprotty@0.11.0-alpha.21acccb8
 
 # Run into production mode
 RUN che-theia production
