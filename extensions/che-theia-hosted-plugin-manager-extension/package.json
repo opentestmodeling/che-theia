@@ -12,8 +12,8 @@
     "@theia/core": "0.11.0",
     "@theia/plugin-dev": "0.11.0",
     "@theia/plugin-ext": "0.11.0",
-    "@eclipse-che/workspace-client": "latest",
-    "@eclipse-che/api": "latest"
+    "@eclipse-che/workspace-client": "0.0.1-1564415689",
+    "@eclipse-che/api": "7.0.0-beta-4.0"
   },
   "scripts": {
     "prepare": "yarn clean && yarn build",

@@ -22,8 +22,8 @@
     "@theia/core": "0.11.0",
     "@theia/terminal": "0.11.0",
     "xterm": "3.9.2",
-    "@eclipse-che/workspace-client": "latest",
-    "@eclipse-che/api": "latest"
+    "@eclipse-che/workspace-client": "0.0.1-1564415689",
+    "@eclipse-che/api": "7.0.0-beta-4.0"
   },
   "license": "EPL-2.0",
   "devDependencies": {

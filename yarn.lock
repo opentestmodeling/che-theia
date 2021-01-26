@@ -30,18 +30,24 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@eclipse-che/api@^7.0.0-beta-4.0", "@eclipse-che/api@^7.0.0-beta-4.0-80162ea6d2", "@eclipse-che/api@latest":
-  version "7.18.1"
-  resolved "https://registry.yarnpkg.com/@eclipse-che/api/-/api-7.18.1.tgz#1beae9ebe694e4b58d0edfefcde07995ce6cd0b2"
-  integrity sha512-KnnnDpnxxK0TBgR0Ux3oOYCvmCv6d4cRA+1j9wiLkaJighCqgCUaxnHWXEfolYbRq1+o/sfsxN+BxRDuF+H8wQ==
+"@eclipse-che/api@7.0.0-beta-4.0":
+  version "7.0.0-beta-4.0"
+  resolved "https://registry.yarnpkg.com/@eclipse-che/api/-/api-7.0.0-beta-4.0.tgz#11c09ea9d231333595a00d9b54b91af9d8a9ae12"
+  integrity sha512-0j10nNc7aT18srs7R38mipyi4DjrGQ+bXBmvf2vLTFJGAqhl8V7pB9HsFUq0CYHd8t+gwfwfH0cUmZHdPcJRjA==
 
-"@eclipse-che/workspace-client@0.0.1-1574171760", "@eclipse-che/workspace-client@latest":
-  version "0.0.1-1574171760"
-  resolved "https://registry.yarnpkg.com/@eclipse-che/workspace-client/-/workspace-client-0.0.1-1574171760.tgz#e4066030fe4cb35f21a82e173e37633d37c76520"
-  integrity sha512-lCnrrb9jKkxbO9QSmFERHvDxrN+8j1X/3RypESu7n7nrG53ubEqnnquTbU+vEgrMHyg1x0ctLRiUBQarM8dslg==
+"@eclipse-che/api@^6.16.1":
+  version "6.17.1"
+  resolved "https://registry.yarnpkg.com/@eclipse-che/api/-/api-6.17.1.tgz#bae00a5ac60501566759ff07b134867996ce8964"
+  integrity sha512-kXrUsNJWUkoZfw9wOKgtZH8KYntjXqkyIHNduXMyELFizpV8n94PWBvSj6MeyeKqogKO5QmeC5xvFZS5/I1fkg==
+
+"@eclipse-che/workspace-client@0.0.1-1564415689", "@eclipse-che/workspace-client@7.2.0":
+  version "0.0.1-1564415689"
+  resolved "https://registry.yarnpkg.com/@eclipse-che/workspace-client/-/workspace-client-0.0.1-1564415689.tgz#b03c6ced7955c111ca34a8f3ce989bffabea2f84"
+  integrity sha512-rlRJL9ZDA3iShIHUdaoRkoVeQuLxMuzfmFQ2T6SBEr7BqtAVqCG+BGlpZQ07T7j5U+a2lSNDxKngou5sfAeDng==
   dependencies:
-    "@eclipse-che/api" "^7.0.0-beta-4.0"
-    axios "0.19.0"
+    "@eclipse-che/api" "^6.16.1"
+    axios "0.18.0"
+    moxios "git://github.com/stoplightio/moxios#v1.3.0"
     websocket "1.0.23"
 
 "@evocateur/libnpmaccess@^3.1.2":
@@ -2482,18 +2488,18 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+axios@0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.0.tgz#32d53e4851efdc0a11993b6cd000789d70c05102"
+  integrity sha1-MtU+SFHv3AoRmTts0AB4nXDAUQI=
+  dependencies:
+    follow-redirects "^1.3.0"
+    is-buffer "^1.1.5"
+
 axios@0.18.1:
   version "0.18.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.1.tgz#ff3f0de2e7b5d180e757ad98000f1081b87bcea3"
   integrity sha512-0BfJq4NSfQXd+SkFdrvFbG7addhYSBA2mQwISr46pD6E5iqkWg02RAs8vyTT/j0RTnoYmeXauBuSv1qKwR179g==
-  dependencies:
-    follow-redirects "1.5.10"
-    is-buffer "^2.0.2"
-
-axios@0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
-  integrity sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==
   dependencies:
     follow-redirects "1.5.10"
     is-buffer "^2.0.2"
@@ -3361,6 +3367,11 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+class-autobind@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/class-autobind/-/class-autobind-0.1.4.tgz#34516c49167cf8d3f639ddc186bcfa2268afff34"
+  integrity sha1-NFFsSRZ8+NP2Od3Bhrz6Imiv/zQ=
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -5132,6 +5143,11 @@ follow-redirects@1.5.10:
   integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
   dependencies:
     debug "=3.1.0"
+
+follow-redirects@^1.3.0:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.1.tgz#5f69b813376cee4fd0474a3aba835df04ab763b7"
+  integrity sha512-SSG5xmZh1mkPGyKzjZP8zLjltIfpW32Y5QpdNJyjcfGxK3qo3NDDkZOZSFiGn1A6SclQxY9GzEwAHQ3dmYRWpg==
 
 font-awesome@^4.7.0:
   version "4.7.0"
@@ -8283,6 +8299,12 @@ move-concurrently@^1.0.1:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
     run-queue "^1.0.3"
+
+"moxios@git://github.com/stoplightio/moxios#v1.3.0":
+  version "1.3.0"
+  resolved "git://github.com/stoplightio/moxios#9d702c8eafee4b02917d6bc400ae15f1e835cf51"
+  dependencies:
+    class-autobind "^0.1.4"
 
 ms@2.0.0:
   version "2.0.0"

@@ -14,7 +14,7 @@
     "typescript-formatter": "7.2.2"
   },
   "resolutions": {
-    "@eclipse-che/workspace-client": "0.0.1-1574171760",
+    "@eclipse-che/workspace-client": "0.0.1-1564415689",
     "@types/react": "^16.8.4",
     "@types/react-dom": "^16.8.4",
     "@types/react-redux": "^7.1.1",

@@ -11,10 +11,10 @@
     ],
     "devDependencies": {
         "@types/node": "^10.0.0",
-        "@eclipse-che/api": "latest",
+        "@eclipse-che/api": "7.0.0-beta-4.0",
         "@eclipse-che/plugin": "7.2.0",
         "@theia/plugin": "0.11.0",
-        "@theia/plugin-packager": "latest",
+        "@theia/plugin-packager": "0.0.1-1551941037",
         "jest": "22.1.4"
     },
     "scripts": {
