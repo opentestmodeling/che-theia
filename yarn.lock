@@ -40,7 +40,7 @@
   resolved "https://registry.yarnpkg.com/@eclipse-che/api/-/api-6.17.1.tgz#bae00a5ac60501566759ff07b134867996ce8964"
   integrity sha512-kXrUsNJWUkoZfw9wOKgtZH8KYntjXqkyIHNduXMyELFizpV8n94PWBvSj6MeyeKqogKO5QmeC5xvFZS5/I1fkg==
 
-"@eclipse-che/workspace-client@0.0.1-1564415689", "@eclipse-che/workspace-client@7.2.0":
+"@eclipse-che/workspace-client@0.0.1-1564415689":
   version "0.0.1-1564415689"
   resolved "https://registry.yarnpkg.com/@eclipse-che/workspace-client/-/workspace-client-0.0.1-1564415689.tgz#b03c6ced7955c111ca34a8f3ce989bffabea2f84"
   integrity sha512-rlRJL9ZDA3iShIHUdaoRkoVeQuLxMuzfmFQ2T6SBEr7BqtAVqCG+BGlpZQ07T7j5U+a2lSNDxKngou5sfAeDng==
@@ -1308,12 +1308,12 @@
     fuzzy "^0.1.3"
     minimatch "^3.0.4"
 
-"@theia/node-pty@0.7.8-theia004", "@theia/node-pty@0.9.0-theia.6":
-  version "0.9.0-theia.6"
-  resolved "https://registry.yarnpkg.com/@theia/node-pty/-/node-pty-0.9.0-theia.6.tgz#b34710419a0b4917cc97e6a7f4d1b5535cae03ab"
-  integrity sha512-TvzoyV1dXWIldBldc7emPNqj9Iy8hWmlNZt/kV6m4bW1NyQrG2/P2MGOy8Ei85IA6G8GVcfZms8TwNiqscC0TA==
+"@theia/node-pty@0.7.8-theia004":
+  version "0.7.8-theia004"
+  resolved "https://registry.yarnpkg.com/@theia/node-pty/-/node-pty-0.7.8-theia004.tgz#0fe31b958df9315352d5fbeea7075047cf69c935"
+  integrity sha512-GetaD2p1qVPq/xbNCHCwKYjIr9IWjksf9V2iiv/hV6f885cJ+ie0Osr4+C159PrwzGRYW2jQVUtXghBJoyOCLg==
   dependencies:
-    nan "^2.14.0"
+    nan "2.10.0"
 
 "@theia/outline-view@0.11.0", "@theia/outline-view@^0.11.0":
   version "0.11.0"
@@ -1393,7 +1393,7 @@
     vscode-debugprotocol "^1.32.0"
     vscode-textmate "^4.0.1"
 
-"@theia/plugin-packager@0.0.1-1551941037", "@theia/plugin-packager@latest":
+"@theia/plugin-packager@0.0.1-1551941037":
   version "0.0.1-1551941037"
   resolved "https://registry.yarnpkg.com/@theia/plugin-packager/-/plugin-packager-0.0.1-1551941037.tgz#859d408be29c6c910f3156ee3ad7c0eb8bfe0ab4"
   integrity sha512-Z+7mZvDH6v001FZhulNupYHtRce5guQqJlY8p0YIvmC3fcrjx8mczEyEE65rlaCKGWeeXcK+dKR3klR+aEdi/g==
@@ -8374,6 +8374,11 @@ mz@^2.5.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
+nan@2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
+  integrity sha512-bAdJv7fBLhWC+/Bls0Oza+mvTaNQtP+1RyhhhvD95pgUJz6XM5IzgmxOkItJ9tkoCiplvAnXI1tNmmUD/eScyA==
+
 nan@^2.0.0, nan@^2.10.0, nan@^2.12.1, nan@^2.14.0, nan@^2.3.3:
   version "2.14.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
@@ -8909,12 +8914,7 @@ p-cancelable@^0.4.0:
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-0.4.1.tgz#35f363d67d52081c8d9585e37bcceb7e0bbcb2a0"
   integrity sha512-HNa1A8LvB1kie7cERyy21VNeHb2CWJJYqyyC2o3klWFfMGlFmWv2Z7sFgZH8ZiaYL95ydToKTFVXgMV/Os0bBQ==
 
-p-debounce@*:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/p-debounce/-/p-debounce-3.0.0.tgz#ae634b5be4a438297c31cbfdc3515ded21009d43"
-  integrity sha512-2dK8+78sCGkn4EUGoM8eZ6KrB9nvIRqQaFPjJcpXs6tz05Ad8cfsAy/VW2UAqJ+0IgMFT2Vwn1PKXFFuQa7cEQ==
-
-p-debounce@^2.1.0:
+p-debounce@*, p-debounce@2.1.0, p-debounce@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/p-debounce/-/p-debounce-2.1.0.tgz#e79f70c6e325cbb9bddbcbec0b81025084671ad3"
   integrity sha512-M9bMt62TTnozdZhqFgs+V7XD2MnuKCaz+7fZdlu2/T7xruI3uIE5CicQ0vx1hV7HIUYF0jF+4/R1AgfOkl74Qw==

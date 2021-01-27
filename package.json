@@ -49,7 +49,8 @@
     "@theia/userstorage": "0.11.0",
     "@theia/variable-resolver": "0.11.0",
     "@theia/workspace": "0.11.0",
-    "inversify": "5.0.1"
+    "inversify": "5.0.1",
+    "p-debounce": "2.1.0"
   },
   "scripts": {
     "prepare": "lerna run prepare",
