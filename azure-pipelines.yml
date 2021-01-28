@@ -47,7 +47,7 @@ jobs:
 
       - script: |
           cd dockerfiles/theia
-          ./build.sh --build-args:GITHUB_TOKEN=$(github_token),THEIA_VERSION=v0.11.0 --tag:$(tag) --prefix:$(prefix) --branch:v0.11.0 --organization:$(organization)
+          ./build.sh --build-args:GITHUB_TOKEN=$(github_token),THEIA_VERSION=v0.11.0 --tag:$(tag) --prefix:$(prefix) --branch:v0.11.0 --organization:$(organization) --skip-tests
         displayName: Building Theia
 
       - task: Docker@1
