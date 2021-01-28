@@ -19,4 +19,4 @@ sources:
     - plugins/task-plugin
     - plugins/welcome-plugin
     - plugins/ssh-plugin
-  checkoutTo: pr-re-enable-to-build
+  checkoutTo: master
