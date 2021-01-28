@@ -11,7 +11,7 @@
 import * as git from '../src/git';
 const rimraf = require('rimraf');
 
-jest.setTimeout(20000);
+jest.setTimeout(90000);
 
 describe('Test git commands', () => {
 

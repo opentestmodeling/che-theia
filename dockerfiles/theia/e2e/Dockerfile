@@ -14,10 +14,11 @@ ENV HOME=/root
 ENV NOCDN=true
 
 RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN apt-get update && \
-    apt-get install -y libx11-dev libxkbfile-dev sudo iproute2
+    apt-get install --force-yes -y libx11-dev libxkbfile-dev sudo iproute2
 CMD /root/docker-run.sh
-RUN yarn global add typescript@2.9.2 node-gyp
+RUN yarn global add typescript@2.9.2 node-gyp && node-gyp install
 
 # Add cypress scripts and grab dependencies
 COPY src /root/

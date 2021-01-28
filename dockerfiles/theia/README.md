@@ -77,7 +77,7 @@ CI generates several tags of [docker images](https://hub.docker.com/r/eclipse/ch
   - che-theia branch: [7.0.0](https://github.com/eclipse/che-theia/tree/7.0.0)
   - CI [build job](https://ci.codenvycorp.com/job/che-theia-7.0.0-next/)
 
-- `eclipse/che:theia:latest` the latest stable Che-Theia 7.0.0 release
+- `eclipse/che-theia:latest` the latest stable Che-Theia 7.0.0 release
   - theia branch: [che-7.0.0](https://github.com/theia-ide/theia/tree/che-7.0.0)
   - che-theia tag: [v7.0.0-rc-4.0](https://github.com/eclipse/che-theia/tree/v7.0.0-rc-4.0)
 

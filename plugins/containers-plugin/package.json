@@ -4,7 +4,7 @@
   "keywords": [
     "theia-plugin"
   ],
-  "version": "0.0.2",
+  "version": "7.2.0",
   "license": "EPL-2.0",
   "files": [
     "src",
@@ -33,9 +33,9 @@
     }
   },
   "devDependencies": {
-    "@theia/plugin": "next",
-    "@theia/plugin-packager": "latest",
-    "@eclipse-che/plugin": "0.0.1"
+    "@theia/plugin": "0.11.0",
+    "@theia/plugin-packager": "0.0.1-1551941037",
+    "@eclipse-che/plugin": "7.2.0"
   },
   "dependencies": {},
   "scripts": {
@@ -45,7 +45,7 @@
     "lint": "tslint -c ../../configs/tslint.json --project tsconfig.json",
     "lint:fix": "tslint -c ../../configs/tslint.json --fix --project .",
     "compile": "tsc",
-    "build": "concurrently -n \"format,lint,compile\" -c \"red,green,blue\" \"yarn format\" \"yarn lint\" \"yarn compile\" && theia:plugin pack",
+    "build": "concurrently -n \"format,lint,compile\" -c \"red,green,blue\" \"yarn format\" \"yarn lint\" \"yarn compile\" && theia-plugin pack",
     "watch": "tsc -w"
   },
   "engines": {

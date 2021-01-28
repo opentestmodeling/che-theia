@@ -4,53 +4,61 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-- master-optemi
+  - master-optemi
+
+variables:
+  - group: che-theia
+  - name: organization
+    value: opentestmodeling
+  - name: prefix
+    value: optemi
+  - name: tag
+    value: next
+
+pool:
+  vmImage: 'Ubuntu-18.04'
 
 jobs:
-- job: Build
-  timeoutInMinutes: 0
+  - job: Build
+    timeoutInMinutes: 0
 
-  variables:
-    - group: che-theia
-    - name: organization
-      value: opentestmodeling
-    - name: prefix
-      value: optemi
-    - name: tag
-      value: next
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.16.3'
 
-  pool:
-    vmImage: 'Ubuntu-16.04'
+      - script: yarn policies set-version 1.21.1
+      - script: npm install -g node-gyp && npx node-gyp install && yarn
+        displayName: Run yarn.
 
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.16'
+  - job: ContainerBuild
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.16.3'
 
-  - script: npm install -g node-gyp && npx node-gyp install && yarn
-    displayName: Run yarn.
+      - script: yarn policies set-version 1.21.1
+      - script: yarn install
 
-  - script: |
-      cd dockerfiles/theia-dev
-      ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --prefix:$(prefix)
-    displayName: Building theia-dev
+      - script: |
+          cd dockerfiles/theia-dev
+          ./build.sh --build-arg:GITHUB_TOKEN=$(github_token) --organization:$(organization) --tag:$(tag) --branch:v0.11.0 --prefix:$(prefix)
+        displayName: Building theia-dev
 
-  - script: |
-      cd dockerfiles/theia
-      ./build.sh --build-args:GITHUB_TOKEN=$(github_token),THEIA_VERSION=master --tag:$(tag) --prefix:$(prefix) --branch:v0.8.0 --git-ref:refs\\/heads\\/master --organization:$(organization)
-    displayName: Building Theia
+      - script: |
+          cd dockerfiles/theia
+          ./build.sh --build-args:GITHUB_TOKEN=$(github_token),THEIA_VERSION=v0.11.0 --tag:$(tag) --prefix:$(prefix) --branch:v0.11.0 --organization:$(organization) --skip-tests
+        displayName: Building Theia
 
-  - task: Docker@1
-    displayName: Container registry login
-    inputs:
-      command: login
-      dockerRegistryEndpoint: dockerhub-monaka
-      containerRegistryType: Container Registry
+      - task: Docker@1
+        displayName: Container registry login
+        inputs:
+          command: login
+          dockerRegistryEndpoint: dockerhub-monaka
+          containerRegistryType: Container Registry
 
-  - script: |
-      docker tag $(organization)/$(prefix)-theia-dev:$(tag) $(organization)/$(prefix)-theia-dev:$(tag)
-      docker tag $(organization)/$(prefix)-theia:$(tag) $(organization)/$(prefix)-theia:$(tag)
-      docker push $(organization)/$(prefix)-theia-dev:$(tag)
-      docker push $(organization)/$(prefix)-theia:$(tag)
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-    displayName: Pushing
+      - script: |
+          docker push $(organization)/$(prefix)-theia-dev:$(tag)
+          docker push $(organization)/$(prefix)-theia:$(tag)
+        condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+        displayName: Pushing

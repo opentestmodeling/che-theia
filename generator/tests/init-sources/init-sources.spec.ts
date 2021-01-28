@@ -35,6 +35,8 @@ describe("Test Extensions", () => {
     let sourceExtension2Tmp: string;
     let extensionYamlTmp: string;
 
+    beforeAll(() => jest.setTimeout(90 * 1000))
+
     beforeEach(async () => {
         rootFolderTmp = tmp.dirSync({ mode: 0o750, prefix: "tmpExtensions", postfix: "" }).name;
         assemblyFolderTmp = path.resolve(rootFolderTmp, 'assembly');
@@ -202,6 +204,7 @@ describe("Test Extensions", () => {
 
     test('use default extensions', async () => {
         const initSources = new InitSources(assemblyExamplePath, packagesFolderTmp, pluginsFolderTmp, cheTheiaFolderTmp, assemblyFolderTmp, THEIA_DUMMY_VERSION);
+
         await initSources.readConfigurationAndGenerate(undefined, false);
         expect(fs.readdirSync(packagesFolderTmp).length).toBeGreaterThan(0);
     });
